@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # ubuntu-latest virou 26.04, ainda sem suporte do Playwright
     timeout-minutes: 30
     steps:
       - name: Checkout
