@@ -106,6 +106,7 @@ final class TestAppFactory
             'request_prefix'        => $config['request_prefix'] ?? 'MED',
             'page_title'            => array_key_exists('page_title', $config) ? $config['page_title'] : 'Clínica Médica | Teste',
             'canonical_url'         => $config['canonical_url'] ?? '',
+            'noindex'               => $config['noindex'] ?? false,
             'landing_content'       => $landingContent,
             'palette'               => $config['palette'] ?? 'blue',
             'show_palette_selector' => $config['show_palette_selector'] ?? false,

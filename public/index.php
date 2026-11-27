@@ -247,6 +247,7 @@ $controller = new HomeController($twig, [
     'landing_content'      => $landingContent,
     'palette'              => $_ENV['APP_PALETTE'] ?? 'blue',
     'show_palette_selector' => $showPaletteSelector,
+    'noindex'              => filter_var($_ENV['APP_NOINDEX'] ?? false, FILTER_VALIDATE_BOOLEAN),
     'base_url'             => $base,
     'public_origin'        => $publicOrigin,
     'public_host'          => $publicHost,
