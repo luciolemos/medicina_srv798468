@@ -1,4 +1,7 @@
 {% set footer_content = landing_content.footer|default({}) %}
+{% set clinic = landing_content.clinic|default({}) %}
+{% set clinic_address = clinic.address|default({}) %}
+{% set clinic_responsible = clinic.responsible|default({}) %}
 {% set social_links = [
   {'href': facebook_url|default(''), 'icon': 'facebook', 'label': 'Facebook'},
   {'href': instagram_url|default(''), 'icon': 'instagram', 'label': 'Instagram'},
@@ -14,9 +17,26 @@
         </div>
 
         <div class="footer-meta small">
-          {{ company_address ?? footer_content.address|default('Atendimento presencial com horário agendado') }}<br>
-          {{ company_meta ?? footer_content.meta|default('Consultas, check-ups e acompanhamento clínico') }}
+          {% if clinic_address.street|default('') %}
+            <address class="mb-0">
+              {{ clinic_address.street }}{% if clinic_address.district|default('') %} — {{ clinic_address.district }}{% endif %}{% if clinic_address.city|default('') %}, {{ clinic_address.city }}{% if clinic_address.region|default('') %}/{{ clinic_address.region }}{% endif %}{% endif %}{% if clinic_address.postal_code|default('') %} · CEP {{ clinic_address.postal_code }}{% endif %}
+            </address>
+          {% else %}
+            {{ footer_content.address|default('Atendimento presencial com horário agendado') }}<br>
+          {% endif %}
+          {% for hour in clinic.hours|default([]) %}
+            {{ hour.label }}{% if hour.time|default('') %}, {{ hour.time }}{% endif %}<br>
+          {% endfor %}
+          {{ footer_content.meta|default('Consultas, check-ups e acompanhamento clínico') }}
         </div>
+
+        {% if clinic_responsible.name|default('') %}
+          <div class="footer-responsible small">
+            {{ clinic_responsible.role|default('Responsável técnico') }}: <strong>{{ clinic_responsible.name }}</strong>
+            {% if clinic_responsible.registry|default('') %} — <span class="footer-registry">{{ clinic_responsible.registry }}</span>{% endif %}
+            {% if clinic_responsible.rqe|default('') %} · <span class="footer-registry">{{ clinic_responsible.rqe }}</span>{% endif %}
+          </div>
+        {% endif %}
       </div>
 
       <nav class="footer-social" aria-label="Redes sociais">
@@ -35,7 +55,7 @@
     </div>
 
     <div class="footer-bottom small">
-      <span>© <span id="year">{{ "now"|date("Y") }}</span> — Todos os direitos reservados</span>
+      <span>© <span id="year">{{ "now"|date("Y") }}</span> — Todos os direitos reservados · <a class="footer-link-inline" href="{{ base_url }}/privacidade">Política de privacidade</a></span>
 
       {% if footer_content.credit|default('') %}
         <span class="footer-credit">{{ footer_content.credit|striptags('<a>')|raw }}</span>

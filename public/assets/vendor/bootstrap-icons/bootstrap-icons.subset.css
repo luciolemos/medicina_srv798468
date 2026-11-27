@@ -28,6 +28,7 @@ url("./fonts/bootstrap-icons.woff?dd67030699838ea613ee6dbda90effa6") format("wof
 
 /* Subconjunto gerado por scripts/build-icons-css.php — não edite à mão. */
 .bi-activity::before { content: "\f66b"; }
+.bi-arrow-left::before { content: "\f12f"; }
 .bi-arrow-right-short::before { content: "\f135"; }
 .bi-bandaid::before { content: "\f681"; }
 .bi-box-arrow-up-right::before { content: "\f1c5"; }
@@ -43,6 +44,7 @@ url("./fonts/bootstrap-icons.woff?dd67030699838ea613ee6dbda90effa6") format("wof
 .bi-clipboard2-check::before { content: "\f725"; }
 .bi-clipboard2-heart::before { content: "\f72a"; }
 .bi-clipboard2-pulse::before { content: "\f730"; }
+.bi-clock::before { content: "\f293"; }
 .bi-clock-history::before { content: "\f292"; }
 .bi-door-open::before { content: "\f308"; }
 .bi-droplet-half::before { content: "\f30c"; }

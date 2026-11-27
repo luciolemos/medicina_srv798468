@@ -25,6 +25,34 @@ return [
             'include_faq' => true,
         ],
     ],
+    // Identificação da clínica: endereço, horário e responsável técnico.
+    // DADOS FICTÍCIOS (demonstração): substitua pelos dados reais antes de publicar.
+    // A Resolução CFM nº 2.336/2023 exige, na publicidade médica, o nome do diretor
+    // técnico com o número do CRM (e do RQE, quando se anuncia especialidade).
+    'clinic' => [
+        'address' => [
+            'street' => 'Condomínio Central Park, nº 255',
+            'district' => 'Neópolis',
+            'city' => 'Natal',
+            'region' => 'RN',
+            'postal_code' => '',
+            'country' => 'BR',
+        ],
+        'hours' => [
+            ['label' => 'Segunda a sexta', 'time' => '8h às 18h', 'days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '08:00', 'closes' => '18:00'],
+        ],
+        'responsible' => [
+            'role' => 'Diretora técnica',
+            'name' => 'Dra. Ana Exemplo',
+            'registry' => 'CRM/RN 00000',
+            'rqe' => '',
+        ],
+    ],
+    // Página /privacidade (LGPD). E-mail fictício (domínio reservado example.com).
+    'privacy' => [
+        'contact_email' => 'privacidade@example.com',
+        'updated_at' => '2026-11-27',
+    ],
     'nav' => [
         'badge' => 'Clínica médica',
         'cta' => 'Agendar',
@@ -158,10 +186,10 @@ return [
     'location' => [
         'title' => 'Localização',
         'eyebrow' => 'Natal, RN',
-        'address' => 'Atendimento com hora marcada',
+        'address' => 'Condomínio Central Park, nº 255 — Neópolis',
         'description' => 'Clínica com agenda organizada para receber cada pessoa com privacidade, pontualidade e orientação clara antes do primeiro atendimento.',
         'details' => [
-            ['icon' => 'geo-alt', 'label' => 'Natal, Rio Grande do Norte'],
+            ['icon' => 'clock', 'label' => 'Segunda a sexta, das 8h às 18h'],
             ['icon' => 'calendar2-check', 'label' => 'Atendimentos realizados mediante agendamento prévio'],
             ['icon' => 'shield-lock', 'label' => 'Ambiente reservado para conversas sensíveis'],
         ],

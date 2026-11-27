@@ -1,0 +1,107 @@
+{% extends 'base.twig' %}
+
+{% set content = landing_content|default({}) %}
+{% set clinic = content.clinic|default({}) %}
+{% set clinic_address = clinic.address|default({}) %}
+{% set clinic_responsible = clinic.responsible|default({}) %}
+{% set privacy = content.privacy|default({}) %}
+{% set controller_name = privacy.controller|default(app_name|default('Clínica')) %}
+{% set app_logo = content.seo.schema.logo|default('assets/img/' ~ app_slug|default('medico') ~ '-mark.svg') %}
+{% set retention_days = lead_retention_days|default(30) %}
+
+{% block content %}
+<nav class="navbar navbar-dark fixed-top py-3 nav-glass" aria-label="Navegação principal">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{{ base_url }}/">
+      <img src="{{ base_url }}/{{ app_logo }}" alt="" class="navbar-logo" width="38" height="38" decoding="async">
+      <span class="fw-semibold">{{ app_name ?? 'Landing de saúde' }}</span>
+    </a>
+    <a class="btn btn-outline-light" href="{{ base_url }}/">
+      <i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar ao site
+    </a>
+  </div>
+</nav>
+
+<main id="top" class="py-5 py-lg-6 section-tech privacy-page">
+  <div class="container">
+    <div class="text-center mb-4 mb-lg-5 section-heading">
+      <h1 class="fw-bold">Política de privacidade</h1>
+      <p class="text-secondary-emphasis mb-0">
+        Como {{ controller_name }} trata os dados pessoais enviados por este site, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).
+      </p>
+    </div>
+
+    <article class="glass privacy-body">
+      <h2>1. Quem é responsável pelos seus dados</h2>
+      <p>
+        O controlador dos dados é <strong>{{ controller_name }}</strong>{% if clinic_address.street|default('') %}, com endereço em
+        {{ clinic_address.street }}{% if clinic_address.district|default('') %} — {{ clinic_address.district }}{% endif %}{% if clinic_address.city|default('') %}, {{ clinic_address.city }}{% if clinic_address.region|default('') %}/{{ clinic_address.region }}{% endif %}{% endif %}{% endif %}.
+        {% if clinic_responsible.name|default('') %}
+          {{ clinic_responsible.role|default('Responsável técnico') }}: {{ clinic_responsible.name }}{% if clinic_responsible.registry|default('') %} — {{ clinic_responsible.registry }}{% endif %}.
+        {% endif %}
+      </p>
+      {% if privacy.contact_email|default('') %}
+      <p>
+        Para qualquer assunto sobre seus dados, fale com o encarregado pelo e-mail
+        <a href="mailto:{{ privacy.contact_email }}">{{ privacy.contact_email }}</a>.
+      </p>
+      {% endif %}
+
+      <h2>2. Quais dados coletamos</h2>
+      <p>Somente os que você informa no formulário de agendamento:</p>
+      <ul>
+        <li>nome, telefone/WhatsApp e e-mail;</li>
+        <li>motivo da consulta e, se quiser, convênio ou observações.</li>
+      </ul>
+      <p>
+        O motivo da consulta pode conter <strong>informações de saúde</strong>, que a LGPD considera dados sensíveis.
+        Escreva apenas o necessário para o agendamento — detalhes clínicos são tratados na consulta.
+      </p>
+
+      <h2>3. Para que usamos</h2>
+      <p>
+        Exclusivamente para responder à sua solicitação: confirmar horário, orientar a chegada e dar retorno sobre o agendamento.
+        Não usamos seus dados para publicidade e não os vendemos.
+      </p>
+
+      <h2>4. Como guardamos</h2>
+      <ul>
+        <li>A solicitação é enviada por e-mail à equipe responsável pelo agendamento.</li>
+        <li>Os registros técnicos do site guardam apenas dados mascarados (iniciais do nome, final do telefone) e o endereço IP de forma irreversível (hash).</li>
+        <li>Se o envio do e-mail falhar, uma cópia de segurança é guardada <strong>cifrada</strong> por até {{ retention_days }} dias, para que seu pedido não se perca, e depois é apagada.</li>
+      </ul>
+
+      <h2>5. Com quem compartilhamos</h2>
+      <ul>
+        {% if recaptcha_enabled ?? false %}
+        <li><strong>Google reCAPTCHA</strong>, para proteger o formulário contra spam. Ele é carregado quando você se aproxima do formulário e recebe dados técnicos do navegador, conforme a <a href="https://policies.google.com/privacy?hl=pt-BR" target="_blank" rel="noopener noreferrer">política de privacidade do Google</a>.</li>
+        {% endif %}
+        {% if content.location.map_embed_url|default('') %}
+        <li><strong>Google Maps</strong>, exibido quando você chega à seção de localização.</li>
+        {% endif %}
+        <li>Provedores de hospedagem e de e-mail, apenas para que o site funcione e a mensagem chegue à equipe.</li>
+      </ul>
+
+      <h2>6. Cookies e armazenamento no navegador</h2>
+      <ul>
+        <li><strong>Sessão:</strong> cookie técnico que protege o formulário contra envios falsificados. É apagado ao fechar o navegador.</li>
+        <li><strong>Preferência de tema:</strong> a escolha entre claro e escuro fica guardada apenas no seu navegador (armazenamento local).</li>
+      </ul>
+      <p>Este site não usa cookies de publicidade.</p>
+
+      <h2>7. Seus direitos</h2>
+      <p>
+        Pelo art. 18 da LGPD, você pode pedir a qualquer momento: confirmação de que tratamos seus dados, acesso, correção,
+        anonimização ou eliminação, informação sobre compartilhamento e revogação do consentimento.
+        {% if privacy.contact_email|default('') %}Basta escrever para <a href="mailto:{{ privacy.contact_email }}">{{ privacy.contact_email }}</a>.{% endif %}
+      </p>
+
+      {% if privacy.updated_at|default('') %}
+      <p class="small text-secondary-emphasis mb-0">Última atualização: {{ privacy.updated_at|date('d/m/Y') }}.</p>
+      {% endif %}
+    </article>
+  </div>
+</main>
+
+{% include 'partials/footer.twig' %}
+{% endblock %}

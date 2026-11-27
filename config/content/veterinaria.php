@@ -21,6 +21,33 @@ return [
             'include_faq' => true,
         ],
     ],
+    // Identificação: endereço, horário e responsável técnico.
+    // DADOS FICTÍCIOS (demonstração): substitua pelos dados reais antes de publicar.
+    // CFMV: estabelecimentos veterinários informam o responsável técnico e o CRMV.
+    'clinic' => [
+        'address' => [
+            'street' => 'Rua Exemplo, nº 100',
+            'district' => 'Centro',
+            'city' => 'Natal',
+            'region' => 'RN',
+            'postal_code' => '',
+            'country' => 'BR',
+        ],
+        'hours' => [
+            ['label' => 'Segunda a sexta', 'time' => '8h às 18h', 'days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '08:00', 'closes' => '18:00'],
+        ],
+        'responsible' => [
+            'role' => 'Responsável técnica',
+            'name' => 'Dra. Beatriz Exemplo',
+            'registry' => 'CRMV-RN 00000',
+            'rqe' => '',
+        ],
+    ],
+    // Página /privacidade (LGPD). E-mail fictício (domínio reservado example.com).
+    'privacy' => [
+        'contact_email' => 'privacidade@example.com',
+        'updated_at' => '2026-11-27',
+    ],
     'nav' => [
         'badge' => 'Veterinária',
         'cta' => 'Agendar',

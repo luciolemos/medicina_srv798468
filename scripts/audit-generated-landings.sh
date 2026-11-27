@@ -115,9 +115,16 @@ for slug in "${SLUGS[@]}"; do
   done
 
   if [[ "$slug" != "medico" ]]; then
-    ! rg -n "assets/img/hero/medico-|assets/img/social/medico-og|assets/img/medico-mark\\.svg|assets/img/clinic-mark\\.svg|assets/img/img_default_640\\.webp" \
-      "$target/config" "$target/views" "$target/src" >/tmp/landing-audit-stale.txt \
-      || fail "$slug contém fallback/asset stale: $(head -1 /tmp/landing-audit-stale.txt)"
+    # grep (sempre disponível) em vez de rg: com "! rg", a ausência do ripgrep fazia a
+    # checagem passar em silêncio. Status: 0 = achou (falha), 1 = limpo, >1 = erro (falha).
+    stale_status=0
+    grep -rnE "assets/img/hero/medico-|assets/img/social/medico-og|assets/img/medico-mark\\.svg|assets/img/clinic-mark\\.svg|assets/img/img_default_640\\.webp" \
+      "$target/config" "$target/views" "$target/src" >/tmp/landing-audit-stale.txt || stale_status=$?
+    if [[ "$stale_status" -eq 0 ]]; then
+      fail "$slug contém fallback/asset stale: $(head -1 /tmp/landing-audit-stale.txt)"
+    elif [[ "$stale_status" -gt 1 ]]; then
+      fail "$slug: erro ao procurar assets stale (grep status $stale_status)"
+    fi
   fi
 
   for other_slug in "${ALL_PRESET_SLUGS[@]}"; do
