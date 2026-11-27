@@ -79,6 +79,12 @@ if ($base !== '' && PHP_SAPI === 'cli-server') {
 if ($base === '') {
     $scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
     $scriptDir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+    // Quando o .htaccess da raiz do projeto reescreve para public/index.php (ex.: raiz de um
+    // subdomínio na Hostinger), o SCRIPT_NAME vem como /public/index.php, mas a URL pública
+    // não tem /public: a base é a pasta acima dele.
+    if (preg_match('#/public$#', $scriptDir) === 1) {
+        $scriptDir = substr($scriptDir, 0, -strlen('/public'));
+    }
     if ($scriptDir !== '' && $scriptDir !== '.' && $scriptDir !== '/') {
         $base = $scriptDir;
         $_ENV['APP_BASE'] = $base;
