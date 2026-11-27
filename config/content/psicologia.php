@@ -29,7 +29,7 @@ return [
         'profile' => 'warm',
     ],
     'hero' => [
-        'badge_icon' => 'journal-heart',
+        'badge_icon' => 'chat-heart',
         'badge' => 'Psicologia com escuta atenta, ritmo seguro e ambiente reservado',
         'title_parts' => [
             'Atendimento psicológico',
@@ -50,7 +50,7 @@ return [
         'trust_items' => [
             ['icon' => 'shield-check', 'label' => 'Privacidade emocional'],
             ['icon' => 'calendar2-check', 'label' => 'Horário protegido'],
-            ['icon' => 'journal-heart', 'label' => 'Escuta clínica'],
+            ['icon' => 'chat-heart', 'label' => 'Escuta clínica'],
         ],
         'proof' => [
             'title' => 'Um espaço de fala com continuidade',
@@ -90,7 +90,7 @@ return [
         'title' => 'Psicologia para atravessar fases, vínculos e sobrecargas',
         'text' => 'Um acompanhamento que acolhe sofrimento emocional, organiza o processo terapêutico e sustenta conversas importantes com presença e respeito.',
         'pills' => [
-            ['icon' => 'journal-heart', 'label' => 'Escuta clínica'],
+            ['icon' => 'chat-heart', 'label' => 'Escuta clínica'],
             ['icon' => 'emoji-neutral', 'label' => 'Ansiedade e sobrecarga'],
             ['icon' => 'people', 'label' => 'Relações e limites'],
             ['icon' => 'clipboard2-check', 'label' => 'Processo terapêutico'],

@@ -45,7 +45,7 @@ return [
         'secondary_cta' => [
             'label' => 'Explorar cuidados',
             'href' => '#features',
-            'icon' => 'sparkles',
+            'icon' => 'stars',
         ],
         'trust_items' => [
             ['icon' => 'shield-check', 'label' => 'Indicação responsável'],

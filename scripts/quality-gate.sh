@@ -27,6 +27,9 @@ while IFS= read -r -d '' file; do
   fi
 done < <(find config/content -maxdepth 1 -type f -name '*.php' -print0 | sort -z)
 
+echo "[step] Bootstrap Icons subset"
+php scripts/build-icons-css.php --check
+
 echo "[step] Shell script lint"
 while IFS= read -r -d '' file; do
   bash -n "$file"
