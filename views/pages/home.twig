@@ -308,13 +308,21 @@
         <span><i class="bi bi-map"></i> {{ location.map_title|default('Localização da clínica') }}</span>
         <span>{{ location.map_subtitle|default(location.address|default('Atendimento com hora marcada')) }}</span>
       </div>
-      <iframe
-        src="{{ location.map_embed_url }}"
-        title="{{ location.iframe_title|default('Mapa de localização') }}"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        allowfullscreen
-      ></iframe>
+      {# O mapa do Google (~500 KB de JS) só carrega quando o visitante chega perto dele (landing.js). #}
+      <div
+        class="location-map-embed"
+        data-map-src="{{ location.map_embed_url }}"
+        data-map-title="{{ location.iframe_title|default('Mapa de localização') }}"
+      ></div>
+      <noscript>
+        <iframe
+          src="{{ location.map_embed_url }}"
+          title="{{ location.iframe_title|default('Mapa de localização') }}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </noscript>
     </div>
 
     <div class="location-actions">

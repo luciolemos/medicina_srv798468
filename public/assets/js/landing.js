@@ -20,6 +20,34 @@
     window.addEventListener("load", () => scheduleAfterFirstPaint(markVisualFxReady), { once: true });
   }
 
+  // Mapa do Google: cria o iframe só quando a seção chega perto da tela.
+  // Carregar na abertura custava ~500 KB de JS e quase 1 s de processamento no celular.
+  const mountMap = (holder) => {
+    if (holder.dataset.mapMounted) return;
+    holder.dataset.mapMounted = "1";
+    const iframe = document.createElement("iframe");
+    iframe.src = holder.dataset.mapSrc;
+    iframe.title = holder.dataset.mapTitle || "Mapa de localização";
+    iframe.referrerPolicy = "no-referrer-when-downgrade";
+    iframe.allowFullscreen = true;
+    holder.replaceWith(iframe);
+  };
+  const mapHolders = document.querySelectorAll(".location-map-embed[data-map-src]");
+  if (mapHolders.length) {
+    if ("IntersectionObserver" in window) {
+      const mapObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          mapObserver.unobserve(entry.target);
+          mountMap(entry.target);
+        });
+      }, { rootMargin: "400px 0px" });
+      mapHolders.forEach((holder) => mapObserver.observe(holder));
+    } else {
+      mapHolders.forEach(mountMap);
+    }
+  }
+
   // Footer year
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();

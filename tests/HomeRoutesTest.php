@@ -153,6 +153,27 @@ final class HomeRoutesTest extends TestCase
         self::assertStringContainsString('<meta name="robots" content="noindex, nofollow">', $html);
     }
 
+    public function testHomeIsIndexableByDefault(): void
+    {
+        $app = TestAppFactory::create(['base_url' => '/medico']);
+
+        $response = $this->request($app, 'GET', '/medico/');
+
+        self::assertSame('', $response->getHeaderLine('X-Robots-Tag'));
+        self::assertStringContainsString('<meta name="robots" content="index, follow', (string) $response->getBody());
+    }
+
+    public function testHomeIsNoindexWhenConfiguredAsDemo(): void
+    {
+        $app = TestAppFactory::create(['base_url' => '/medico', 'noindex' => true]);
+
+        $response = $this->request($app, 'GET', '/medico/');
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('noindex, nofollow', $response->getHeaderLine('X-Robots-Tag'));
+        self::assertStringContainsString('<meta name="robots" content="noindex, nofollow">', (string) $response->getBody());
+    }
+
     public function testHomeRendersClinicCopyAndPaletteStateFromQueryString(): void
     {
         $app = TestAppFactory::create([

@@ -715,17 +715,16 @@ button:active {
   position: relative;
 }
 
+/* Só movimento, sem fade: o título é o maior elemento da primeira tela (LCP) e,
+   começando invisível (opacity: 0), o navegador só o contava como pronto no fim da animação. */
 @keyframes hero-title-enter {
   0% {
-    opacity: 0;
     transform: translate3d(0, 40px, 0) scale(0.94);
   }
   62% {
-    opacity: 1;
     transform: translate3d(0, -8px, 0) scale(1.03);
   }
   100% {
-    opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
   }
 }
@@ -772,9 +771,8 @@ button:active {
 
 .hero-title-motion .hero-title-part {
   display: inline-block;
-  opacity: 0;
   transform: translate3d(0, 40px, 0) scale(0.94);
-  will-change: transform, opacity;
+  will-change: transform;
   animation: hero-title-enter 760ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
@@ -1242,6 +1240,12 @@ html.fx-ready .hero-media img {
   overflow: hidden;
   border-color: rgba(var(--gradA), 0.22);
   box-shadow: var(--shadow-card-soft);
+}
+
+.location-map-embed {
+  width: 100%;
+  height: 100%;
+  background: rgba(var(--gradA), 0.06);
 }
 
 .location-map-banner iframe {
