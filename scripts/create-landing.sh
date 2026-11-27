@@ -439,6 +439,7 @@ prune_extra_niche_content
 prune_extra_niche_assets
 apply_content_preset
 CONTENT_FILE="$(resolve_content_file)"
+php "$TARGET_DIR/scripts/build-icons-css.php" >/dev/null
 
 cp "$TARGET_DIR/.env.example" "$TARGET_DIR/.env"
 set_env_value "$TARGET_DIR/.env" "APP_NAME" "$APP_NAME"
