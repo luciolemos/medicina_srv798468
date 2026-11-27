@@ -291,7 +291,9 @@ final class HomeRoutesTest extends TestCase
         $html = (string) $response->getBody();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertStringContainsString('https://www.google.com/recaptcha/api.js?render=site-key-123', $html);
+        // O script do Google é carregado sob demanda pelo landing.js (não bloqueia a abertura da página).
+        self::assertStringNotContainsString('recaptcha/api.js', $html);
+        self::assertStringContainsString('enabled: true,', $html);
         self::assertStringContainsString('class="bg-body text-body antialiased has-recaptcha"', $html);
         self::assertStringContainsString('name="recaptcha_token"', $html);
         self::assertStringContainsString('data-recaptcha-site-key="site-key-123"', $html);

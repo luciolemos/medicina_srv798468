@@ -52,6 +52,46 @@
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
 
+  // reCAPTCHA v3 sob demanda: o script do Google (~750 KiB, segundos de CPU no celular)
+  // só é baixado quando o formulário se aproxima da tela, recebe foco ou é enviado.
+  let recaptchaLoadPromise = null;
+  const loadRecaptcha = () => {
+    if (recaptchaLoadPromise) return recaptchaLoadPromise;
+
+    const recaptchaConfig = window.APP && window.APP.recaptcha;
+    const siteKey = recaptchaConfig && recaptchaConfig.enabled ? String(recaptchaConfig.siteKey || "").trim() : "";
+    if (!siteKey) {
+      return Promise.reject(new Error("recaptcha_disabled"));
+    }
+
+    recaptchaLoadPromise = new Promise((resolve, reject) => {
+      const whenReady = () => {
+        if (window.grecaptcha && typeof window.grecaptcha.ready === "function") {
+          window.grecaptcha.ready(() => resolve(window.grecaptcha));
+        } else {
+          reject(new Error("recaptcha_unavailable"));
+        }
+      };
+
+      if (window.grecaptcha && typeof window.grecaptcha.ready === "function") {
+        whenReady();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://www.google.com/recaptcha/api.js?render=" + encodeURIComponent(siteKey);
+      script.async = true;
+      script.addEventListener("load", whenReady, { once: true });
+      script.addEventListener("error", () => reject(new Error("recaptcha_load_failed")), { once: true });
+      document.head.appendChild(script);
+    }).catch((error) => {
+      recaptchaLoadPromise = null; // permite nova tentativa (ex.: rede instável)
+      throw error;
+    });
+
+    return recaptchaLoadPromise;
+  };
+
   const ensureRecaptchaLayoutClass = () => {
     const recaptchaConfig = window.APP && window.APP.recaptcha;
     const isRecaptchaConfigured = !!(recaptchaConfig && recaptchaConfig.enabled);
@@ -546,16 +586,36 @@
       if (!recaptchaTokenInput) return Promise.resolve("");
       const siteKey = (recaptchaTokenInput.getAttribute("data-recaptcha-site-key") || "").trim();
       const action = (recaptchaTokenInput.getAttribute("data-recaptcha-action") || "contact_submit").trim() || "contact_submit";
-      if (!siteKey || !window.grecaptcha || typeof window.grecaptcha.ready !== "function" || typeof window.grecaptcha.execute !== "function") {
+      if (!siteKey) {
         return Promise.reject(new Error("recaptcha_unavailable"));
       }
 
-      return new Promise((resolve, reject) => {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha.execute(siteKey, { action }).then(resolve).catch(reject);
-        });
+      return loadRecaptcha().then((grecaptcha) => {
+        if (typeof grecaptcha.execute !== "function") {
+          throw new Error("recaptcha_unavailable");
+        }
+        return grecaptcha.execute(siteKey, { action });
       });
     };
+
+    // Pré-carrega o reCAPTCHA quando o formulário está perto de aparecer ou recebe foco,
+    // para o envio não precisar esperar o download.
+    if (recaptchaTokenInput) {
+      const preloadRecaptcha = () => {
+        loadRecaptcha().catch(() => {});
+      };
+      leadForm.addEventListener("focusin", preloadRecaptcha, { once: true });
+      if ("IntersectionObserver" in window) {
+        const recaptchaObserver = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          recaptchaObserver.disconnect();
+          preloadRecaptcha();
+        }, { rootMargin: "600px 0px" });
+        recaptchaObserver.observe(leadForm);
+      } else {
+        preloadRecaptcha();
+      }
+    }
 
     leadForm.addEventListener("submit", (event) => {
       if (isSubmittingWithRecaptcha) return;
