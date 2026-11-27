@@ -93,9 +93,8 @@
    {% endif %}
    {% endfor %}
 
-  {% if recaptcha_enabled ?? false %}
-  <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key|url_encode }}" async defer></script>
-  {% endif %}
+  {# reCAPTCHA (~750 KiB de JS) é carregado sob demanda pelo landing.js, quando o
+     formulário se aproxima da tela ou recebe foco — ver loadRecaptcha(). #}
   {% if structured_data_json|default('') %}
   <script type="application/ld+json">{{ structured_data_json|raw }}</script>
   {% endif %}

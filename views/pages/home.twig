@@ -463,7 +463,7 @@
             </div>
             <div class="col-12 col-md-6" data-step-field="1">
               <label class="form-label text-secondary-emphasis" for="cta-telefone">{{ form_fields.phone_label|default('Telefone / WhatsApp') }}</label>
-              <input class="form-control form-control-lg{{ form_errors.telefone is defined ? ' is-invalid' : '' }}" type="tel" id="cta-telefone" name="telefone" value="{{ form_data.telefone|e }}" autocomplete="tel" inputmode="tel" pattern="[\d\s()+-]{10,20}" placeholder="{{ form_fields.phone_placeholder|default('(84) 99999-9999') }}" required>
+              <input class="form-control form-control-lg{{ form_errors.telefone is defined ? ' is-invalid' : '' }}" type="tel" id="cta-telefone" name="telefone" value="{{ form_data.telefone|e }}" autocomplete="tel" inputmode="tel" pattern="[\d\s\(\)\+\-]{10,20}" placeholder="{{ form_fields.phone_placeholder|default('(84) 99999-9999') }}" required>
               {% if form_errors.telefone is defined %}
                 <div class="invalid-feedback d-block">{{ form_errors_copy.phone|default('Informe um telefone válido para contato.') }}</div>
               {% endif %}
