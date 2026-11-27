@@ -294,7 +294,8 @@ final class HomeRoutesTest extends TestCase
         // O script do Google é carregado sob demanda pelo landing.js (não bloqueia a abertura da página).
         self::assertStringNotContainsString('recaptcha/api.js', $html);
         self::assertStringContainsString('enabled: true,', $html);
-        self::assertStringContainsString('class="bg-body text-body antialiased has-recaptcha"', $html);
+        // Selo do Google escondido via CSS: o aviso em texto junto do formulário é obrigatório.
+        self::assertStringContainsString('class="recaptcha-disclosure', $html);
         self::assertStringContainsString('name="recaptcha_token"', $html);
         self::assertStringContainsString('data-recaptcha-site-key="site-key-123"', $html);
         self::assertStringContainsString('data-recaptcha-action="contact_submit"', $html);
