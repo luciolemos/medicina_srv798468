@@ -173,6 +173,11 @@ $line = static function (string $type, string $message) use (&$checks, &$warning
         return;
     }
 
+    if ($type === 'info') {
+        echo "[info] {$message}\n";
+        return;
+    }
+
     if ($type === 'warn') {
         $warnings++;
         echo "[warn] {$message}\n";
@@ -424,6 +429,31 @@ foreach ([
     'footer.credit',
 ] as $requiredPath) {
     $requireString($requiredPath);
+}
+
+// Identificação exigida pelos conselhos profissionais (ex.: Resolução CFM nº 2.336/2023:
+// diretor técnico com CRM) e contato de privacidade (LGPD). Aviso, não falha: com --strict
+// (usado pelo create-landing.sh) uma landing nova não passa sem esses dados.
+foreach ([
+    'clinic.responsible.name' => 'responsável técnico (nome) ausente — conselhos profissionais exigem na publicidade',
+    'clinic.responsible.registry' => 'registro do responsável técnico (CRM/CRO/CRP…) ausente',
+    'clinic.address.street' => 'endereço da clínica ausente (rodapé e schema.org)',
+    'clinic.address.city' => 'cidade da clínica ausente (rodapé e schema.org)',
+    'privacy.contact_email' => 'e-mail de contato para privacidade (LGPD) ausente na página /privacidade',
+] as $recommendedPath => $message) {
+    if ($string($get($content, $recommendedPath)) === '') {
+        $line('warn', "{$recommendedPath}: {$message}");
+    } else {
+        $line('ok', "{$recommendedPath} preenchido");
+    }
+}
+
+foreach (['clinic.responsible.name', 'clinic.responsible.registry', 'privacy.contact_email'] as $demoPath) {
+    $value = $string($get($content, $demoPath));
+    if ($value !== '' && preg_match('/\bExemplo\b|\b0{5}\b|@example\.com$/', $value) === 1) {
+        // Informativo (não reprova o --strict): toda landing nova nasce com dados de demonstração.
+        $line('info', "{$demoPath} ainda tem dado fictício de demonstração ({$value}) — substitua antes de publicar");
+    }
 }
 
 echo "\nSummary\n";

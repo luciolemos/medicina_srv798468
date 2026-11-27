@@ -40,20 +40,7 @@ final class HomeController
         // APP_NOINDEX: site de demonstração (portfólio) fica fora do Google.
         $shouldNoindex = $hasSeoVariantQuery || (bool) ($this->config['noindex'] ?? false);
 
-        $paletteFromQuery = strtolower((string) ($queryParams['palette'] ?? ''));
-        $paletteFromCookie = strtolower((string) ($_COOKIE[self::PALETTE_COOKIE_NAME] ?? ''));
-        $paletteFromConfig = strtolower((string) ($this->config['palette'] ?? 'blue'));
-
-        if (in_array($paletteFromQuery, self::ALLOWED_PALETTES, true)) {
-            $palette = $paletteFromQuery;
-        } elseif (in_array($paletteFromConfig, self::ALLOWED_PALETTES, true)) {
-            $palette = $paletteFromConfig;
-        } elseif (in_array($paletteFromCookie, self::ALLOWED_PALETTES, true)) {
-            $palette = $paletteFromCookie;
-        } else {
-            $palette = 'blue';
-        }
-
+        $palette = $this->resolvePalette($queryParams);
         $this->persistPaletteCookie($palette);
 
         $flash = $this->pullFormFlash();
@@ -91,6 +78,40 @@ final class HomeController
                 'mensagem' => '',
             ],
             'form_errors' => $flash['errors'] ?? [],
+        ]);
+    }
+
+    /**
+     * Política de privacidade (LGPD): descreve o tratamento que o site realmente faz
+     * (formulário, logs mascarados, backup cifrado, reCAPTCHA, cookies).
+     */
+    public function privacy(Request $request, Response $response): Response
+    {
+        $landingContent = $this->landingContent();
+        $seo = new SeoMetadata($this->config, $landingContent);
+        $seoMeta = $seo->meta();
+        $canonical = $seoMeta['canonical_url'] . 'privacidade';
+        $seoMeta['title'] = 'Política de privacidade | ' . $this->brandName();
+        $seoMeta['description'] = 'Como ' . $this->brandName() . ' trata os dados pessoais enviados pelo site, conforme a LGPD.';
+        $seoMeta['canonical_url'] = $canonical;
+
+        $shouldNoindex = (bool) ($this->config['noindex'] ?? false);
+        if ($shouldNoindex) {
+            $response = $response->withHeader('X-Robots-Tag', 'noindex, nofollow');
+        }
+
+        return $this->twig->render($response, 'pages/privacy.twig', [
+            'app_name' => $this->config['app_name'] ?? 'Clínica Médica',
+            'app_slug' => $this->config['app_slug'] ?? 'medico',
+            'landing_content' => $landingContent,
+            'seo_meta' => $seoMeta,
+            'structured_data_json' => '',
+            'palette' => $this->resolvePalette($request->getQueryParams()),
+            'canonical_url' => $canonical,
+            'should_noindex' => $shouldNoindex,
+            'allowed_palettes' => self::ALLOWED_PALETTES,
+            'recaptcha_enabled' => $this->recaptchaVerifier->isFrontendEnabled(),
+            'lead_retention_days' => max(1, (int) ($this->config['lead_log_retention_days'] ?? 30)),
         ]);
     }
 
@@ -349,6 +370,21 @@ final class HomeController
         return $response
             ->withHeader('Location', rtrim($base, '/') . '/#form-orcamento')
             ->withStatus(302);
+    }
+
+    private function resolvePalette(array $queryParams): string
+    {
+        $paletteFromQuery = strtolower((string) ($queryParams['palette'] ?? ''));
+        $paletteFromCookie = strtolower((string) ($_COOKIE[self::PALETTE_COOKIE_NAME] ?? ''));
+        $paletteFromConfig = strtolower((string) ($this->config['palette'] ?? 'blue'));
+
+        foreach ([$paletteFromQuery, $paletteFromConfig, $paletteFromCookie] as $candidate) {
+            if (in_array($candidate, self::ALLOWED_PALETTES, true)) {
+                return $candidate;
+            }
+        }
+
+        return 'blue';
     }
 
     private function persistPaletteCookie(string $palette): void

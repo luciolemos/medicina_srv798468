@@ -253,6 +253,7 @@ $controller = new HomeController($twig, [
     'public_host'          => $publicHost,
     'trusted_proxies'      => $trustedProxies,
     'contact_to'           => $_ENV['CONTACT_TO'] ?? null,
+    'lead_log_retention_days' => (int) ($_ENV['LEAD_LOG_RETENTION_DAYS'] ?? 30),
     'x_url'                => $_ENV['X_URL'] ?? '#',
     'facebook_url'         => $_ENV['FACEBOOK_URL'] ?? '#',
     'instagram_url'        => $_ENV['INSTAGRAM_URL'] ?? '#',

@@ -112,6 +112,7 @@ final class TestAppFactory
             'show_palette_selector' => $config['show_palette_selector'] ?? false,
             'base_url'              => $base,
             'contact_to'            => array_key_exists('contact_to', $config) ? $config['contact_to'] : 'contato@example.com',
+            'lead_log_retention_days' => $config['lead_log_retention_days'] ?? 30,
             'x_url'                 => $config['x_url'] ?? '#',
             'facebook_url'          => $config['facebook_url'] ?? '#',
             'instagram_url'         => $config['instagram_url'] ?? '#',

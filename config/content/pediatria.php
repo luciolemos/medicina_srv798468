@@ -21,6 +21,33 @@ return [
             'include_faq' => true,
         ],
     ],
+    // Identificação: endereço, horário e responsável técnico.
+    // DADOS FICTÍCIOS (demonstração): substitua pelos dados reais antes de publicar.
+    // Resolução CFM nº 2.336/2023: nome do diretor técnico com CRM e RQE da especialidade anunciada.
+    'clinic' => [
+        'address' => [
+            'street' => 'Rua Exemplo, nº 100',
+            'district' => 'Centro',
+            'city' => 'Natal',
+            'region' => 'RN',
+            'postal_code' => '',
+            'country' => 'BR',
+        ],
+        'hours' => [
+            ['label' => 'Segunda a sexta', 'time' => '8h às 18h', 'days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '08:00', 'closes' => '18:00'],
+        ],
+        'responsible' => [
+            'role' => 'Diretora técnica',
+            'name' => 'Dra. Luiza Exemplo',
+            'registry' => 'CRM/RN 00000',
+            'rqe' => 'RQE 00000',
+        ],
+    ],
+    // Página /privacidade (LGPD). E-mail fictício (domínio reservado example.com).
+    'privacy' => [
+        'contact_email' => 'privacidade@example.com',
+        'updated_at' => '2026-11-27',
+    ],
     'nav' => [
         'badge' => 'Pediatria',
         'cta' => 'Agendar',

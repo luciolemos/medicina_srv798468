@@ -72,6 +72,17 @@ final class SeoMetadata
             $business['telephone'] = $phone;
         }
 
+        $clinic = $this->arrayValue($this->content['clinic'] ?? []);
+        $address = $this->postalAddress($this->arrayValue($clinic['address'] ?? []));
+        if ($address !== []) {
+            $business['address'] = $address;
+        }
+
+        $openingHours = $this->openingHoursSpecification($clinic['hours'] ?? []);
+        if ($openingHours !== []) {
+            $business['openingHoursSpecification'] = $openingHours;
+        }
+
         $areaServed = $this->firstNonEmpty($schema['area_served'] ?? null);
         if ($areaServed !== '') {
             $business['areaServed'] = $areaServed;
@@ -227,6 +238,81 @@ final class SeoMetadata
         $genericHosts = ['facebook.com', 'www.facebook.com', 'instagram.com', 'www.instagram.com', 'x.com', 'www.x.com'];
 
         return in_array($host, $genericHosts, true) && $path === '';
+    }
+
+    /**
+     * @param array<string, mixed> $address
+     * @return array<string, string>
+     */
+    private function postalAddress(array $address): array
+    {
+        $street = $this->firstNonEmpty($address['street'] ?? null);
+        $city = $this->firstNonEmpty($address['city'] ?? null);
+        if ($street === '' || $city === '') {
+            return [];
+        }
+
+        $result = [
+            '@type' => 'PostalAddress',
+            'streetAddress' => $street,
+            'addressLocality' => $city,
+        ];
+
+        $optional = [
+            'addressRegion' => $address['region'] ?? null,
+            'postalCode' => $address['postal_code'] ?? null,
+            'addressCountry' => $address['country'] ?? 'BR',
+        ];
+        foreach ($optional as $key => $value) {
+            $value = $this->firstNonEmpty($value);
+            if ($value !== '') {
+                $result[$key] = $value;
+            }
+        }
+
+        $district = $this->firstNonEmpty($address['district'] ?? null);
+        if ($district !== '') {
+            $result['streetAddress'] .= ' - ' . $district;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function openingHoursSpecification(mixed $hours): array
+    {
+        if (!is_array($hours)) {
+            return [];
+        }
+
+        $validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $result = [];
+        foreach ($hours as $entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            $days = array_values(array_filter(
+                is_array($entry['days'] ?? null) ? $entry['days'] : [],
+                static fn ($day): bool => is_string($day) && in_array($day, $validDays, true)
+            ));
+            $opens = $this->firstNonEmpty($entry['opens'] ?? null);
+            $closes = $this->firstNonEmpty($entry['closes'] ?? null);
+            if ($days === [] || preg_match('/^\d{2}:\d{2}$/', $opens) !== 1 || preg_match('/^\d{2}:\d{2}$/', $closes) !== 1) {
+                continue;
+            }
+
+            $result[] = [
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => $days,
+                'opens' => $opens,
+                'closes' => $closes,
+            ];
+        }
+
+        return $result;
     }
 
     private function telephoneFromUrl(string $url): string

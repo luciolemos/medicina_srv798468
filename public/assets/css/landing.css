@@ -652,6 +652,36 @@ button:active {
   padding: 0 0 1.1rem;
 }
 
+.footer-meta address {
+  font-style: normal;
+}
+
+.footer-responsible {
+  color: var(--muted);
+  line-height: 1.55;
+  margin-top: 0.45rem;
+}
+
+.footer-responsible strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.footer-registry {
+  white-space: nowrap;
+}
+
+.footer-link-inline {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-link-inline:hover,
+.footer-link-inline:focus-visible {
+  color: var(--text);
+}
+
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.95rem 0 calc(1.15rem + 3.35rem);
@@ -2227,4 +2257,34 @@ html[data-theme="light"] code {
   background: rgba(var(--light-accent-rgb), 0.1);
   border-radius: 6px;
   padding: 0 0.25rem;
+}
+
+/* Política de privacidade (/privacidade) */
+.privacy-page {
+  padding-top: 7rem !important;
+}
+
+.privacy-body {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  line-height: 1.7;
+}
+
+.privacy-body h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 1.8rem 0 0.6rem;
+}
+
+.privacy-body h2:first-child {
+  margin-top: 0;
+}
+
+.privacy-body ul {
+  padding-left: 1.2rem;
+}
+
+.privacy-body li + li {
+  margin-top: 0.35rem;
 }

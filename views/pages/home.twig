@@ -515,7 +515,7 @@
         </div>
         {% if form.privacy_note|default('') %}
         <p class="privacy-disclosure mb-0">
-          {{ form.privacy_note }}
+          {{ form.privacy_note }} <a href="{{ base_url }}/privacidade">Política de privacidade</a>.
         </p>
         {% endif %}
         {% if recaptcha_enabled ?? false %}

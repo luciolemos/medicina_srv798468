@@ -153,6 +153,90 @@ final class HomeRoutesTest extends TestCase
         self::assertStringContainsString('<meta name="robots" content="noindex, nofollow">', $html);
     }
 
+    public function testHomeShowsClinicIdentificationInFooterAndStructuredData(): void
+    {
+        $app = TestAppFactory::create(['base_url' => '/medico']);
+
+        $response = $this->request($app, 'GET', '/medico/');
+        $html = (string) $response->getBody();
+        $business = $this->extractStructuredData($html)['@graph'][0] ?? [];
+
+        self::assertSame(200, $response->getStatusCode());
+        // Resolução CFM nº 2.336/2023: diretor técnico com CRM na publicidade médica.
+        self::assertStringContainsString('Diretora técnica: <strong>Dra. Ana Exemplo</strong>', $html);
+        self::assertStringContainsString('CRM/RN 00000', $html);
+        self::assertStringContainsString('Condomínio Central Park, nº 255 — Neópolis, Natal/RN', $html);
+        self::assertStringContainsString('Segunda a sexta, 8h às 18h', $html);
+        self::assertStringContainsString('href="/medico/privacidade"', $html);
+
+        self::assertSame('PostalAddress', $business['address']['@type'] ?? null);
+        self::assertSame('Condomínio Central Park, nº 255 - Neópolis', $business['address']['streetAddress'] ?? null);
+        self::assertSame('Natal', $business['address']['addressLocality'] ?? null);
+        self::assertSame('RN', $business['address']['addressRegion'] ?? null);
+        self::assertSame('BR', $business['address']['addressCountry'] ?? null);
+        self::assertSame(
+            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            $business['openingHoursSpecification'][0]['dayOfWeek'] ?? null
+        );
+        self::assertSame('08:00', $business['openingHoursSpecification'][0]['opens'] ?? null);
+        self::assertSame('18:00', $business['openingHoursSpecification'][0]['closes'] ?? null);
+    }
+
+    public function testHomeOmitsClinicIdentificationWhenContentHasNoClinicBlock(): void
+    {
+        $content = \App\Core\LandingContent::load(dirname(__DIR__), '', 'landing');
+        unset($content['clinic']);
+        $app = TestAppFactory::create(['base_url' => '/medico', 'landing_content' => $content]);
+
+        $html = (string) $this->request($app, 'GET', '/medico/')->getBody();
+        $business = $this->extractStructuredData($html)['@graph'][0] ?? [];
+
+        self::assertStringNotContainsString('footer-responsible', $html);
+        self::assertArrayNotHasKey('address', $business);
+        self::assertArrayNotHasKey('openingHoursSpecification', $business);
+    }
+
+    public function testPrivacyPageDescribesDataHandling(): void
+    {
+        $app = TestAppFactory::create([
+            'base_url' => '/medico',
+            'lead_log_retention_days' => 15,
+            'recaptcha_enabled' => true,
+            'recaptcha_site_key' => 'site-key-123',
+        ]);
+
+        $response = $this->request($app, 'GET', '/medico/privacidade');
+        $html = (string) $response->getBody();
+        $decodedHtml = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertStringContainsString('<title>Política de privacidade | Clínica Médica</title>', $html);
+        self::assertStringContainsString('<link rel="canonical" href="http://localhost/medico/privacidade">', $decodedHtml);
+        self::assertStringContainsString('Lei nº 13.709/2018', $html);
+        self::assertStringContainsString('por até 15 dias', $html);
+        self::assertStringContainsString('Google reCAPTCHA', $html);
+        self::assertStringContainsString('mailto:privacidade@example.com', $html);
+        self::assertStringContainsString('Dra. Ana Exemplo', $html);
+        self::assertStringContainsString('href="/medico/"', $html);
+        // Página informativa: sem formulário, sem JSON-LD e sem o script do reCAPTCHA.
+        self::assertStringNotContainsString('js-lead-form', $html);
+        self::assertStringNotContainsString('application/ld+json', $html);
+        self::assertStringNotContainsString('recaptcha/api.js', $html);
+    }
+
+    public function testPrivacyPageOmitsRecaptchaWhenDisabledAndRespectsNoindex(): void
+    {
+        $app = TestAppFactory::create(['base_url' => '/medico', 'noindex' => true]);
+
+        $response = $this->request($app, 'GET', '/medico/privacidade');
+        $html = (string) $response->getBody();
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertStringNotContainsString('Google reCAPTCHA', $html);
+        self::assertSame('noindex, nofollow', $response->getHeaderLine('X-Robots-Tag'));
+        self::assertStringContainsString('<meta name="robots" content="noindex, nofollow">', $html);
+    }
+
     public function testHomeIsIndexableByDefault(): void
     {
         $app = TestAppFactory::create(['base_url' => '/medico']);
