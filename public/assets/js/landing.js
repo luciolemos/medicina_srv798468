@@ -168,17 +168,6 @@
     const p = url.searchParams.get("palette");
     return isValidPalette(p || "") ? p : "";
   };
-  const resolveCookiePath = () => {
-    const baseUrl = window.APP && typeof window.APP.baseUrl === "string" ? window.APP.baseUrl.trim() : "";
-    if (!baseUrl || baseUrl === "/") return "/";
-    return `/${baseUrl.replace(/^\/+|\/+$/g, "")}/`;
-  };
-  const persistPaletteCookie = (palette) => {
-    if (!isValidPalette(palette)) return;
-    const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
-    const secure = window.location.protocol === "https:" ? "; Secure" : "";
-    document.cookie = `palette=${encodeURIComponent(palette)}; expires=${expires}; path=${resolveCookiePath()}; SameSite=Lax${secure}`;
-  };
   const stripPaletteQueryParam = () => {
     const url = new URL(window.location.href);
     if (!url.searchParams.has("palette")) return;
@@ -208,7 +197,6 @@
       activePalette = fromUrl;
     }
     applyPalette(activePalette);
-    persistPaletteCookie(activePalette);
     stripPaletteQueryParam();
   }
 
@@ -218,8 +206,6 @@
         const next = buttonEl.getAttribute("data-palette-btn") || "";
         if (!isValidPalette(next)) return;
         applyPalette(next);
-        persistPaletteCookie(next);
-        try { localStorage.setItem("palette", next); } catch (e) {}
       });
     });
   }

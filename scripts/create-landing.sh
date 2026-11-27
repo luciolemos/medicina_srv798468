@@ -426,6 +426,7 @@ mkdir -p "$TARGET_DIR"
     --exclude='./.phpunit.cache' \
     --exclude='./test-results' \
     --exclude='./playwright-report' \
+    --exclude='./.lighthouseci' \
     -cf - .
 ) | (
   cd "$TARGET_DIR"

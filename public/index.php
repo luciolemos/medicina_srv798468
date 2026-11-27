@@ -20,19 +20,32 @@ use Slim\Views\TwigMiddleware;
 require __DIR__ . '/../src/Core/Env.php';
 Env::load(__DIR__ . '/../.env');
 
+/**
+ * APP_BASE configurado. No servidor embutido (`php -S`), ignora a base quando a URL pedida
+ * não está sob ela — assim o mesmo .env funciona em /medico/ e na raiz durante testes locais.
+ */
+$configuredBase = static function (): string {
+    $base = trim((string) ($_ENV['APP_BASE'] ?? ''));
+    if ($base === '' || PHP_SAPI !== 'cli-server') {
+        return $base;
+    }
+
+    $requestUriPath = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
+    $normalizedBase = '/' . trim($base, '/');
+    if ($requestUriPath === '' || $requestUriPath === '/') {
+        return '';
+    }
+    if ($normalizedBase !== '/' && !str_starts_with($requestUriPath, $normalizedBase . '/') && $requestUriPath !== $normalizedBase) {
+        return '';
+    }
+
+    return $base;
+};
+
 if (session_status() === PHP_SESSION_NONE) {
     $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
         || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
-    $sessionBase = trim((string) ($_ENV['APP_BASE'] ?? ''));
-    if ($sessionBase !== '' && PHP_SAPI === 'cli-server') {
-        $requestUriPath = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
-        $normalizedBase = '/' . trim($sessionBase, '/');
-        if ($requestUriPath === '' || $requestUriPath === '/') {
-            $sessionBase = '';
-        } elseif ($normalizedBase !== '/' && strpos($requestUriPath, $normalizedBase . '/') !== 0 && $requestUriPath !== $normalizedBase) {
-            $sessionBase = '';
-        }
-    }
+    $sessionBase = $configuredBase();
     $sessionPath = '/';
     if ($sessionBase !== '' && $sessionBase !== '/') {
         $sessionPath = '/' . trim($sessionBase, '/') . '/';
@@ -66,16 +79,7 @@ $landingContent = LandingContent::load(
     (string) ($_ENV['APP_SLUG'] ?? '')
 );
 
-$base = trim((string) ($_ENV['APP_BASE'] ?? ''));
-if ($base !== '' && PHP_SAPI === 'cli-server') {
-    $requestUriPath = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
-    $normalizedBase = '/' . trim($base, '/');
-    if ($requestUriPath === '' || $requestUriPath === '/') {
-        $base = '';
-    } elseif ($normalizedBase !== '/' && strpos($requestUriPath, $normalizedBase . '/') !== 0 && $requestUriPath !== $normalizedBase) {
-        $base = '';
-    }
-}
+$base = $configuredBase();
 if ($base === '') {
     $scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
     $scriptDir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
@@ -126,9 +130,9 @@ if ($assetVersion === '') {
         (int) (@filemtime(__DIR__ . '/assets/css/app.css') ?: 0),
         (int) (@filemtime(__DIR__ . '/assets/css/landing.css') ?: 0),
         (int) (@filemtime(__DIR__ . '/assets/js/landing.js') ?: 0),
-        (int) (@filemtime(__DIR__ . '/assets/vendor/bootstrap/bootstrap.min.css') ?: 0),
+        (int) (@filemtime(__DIR__ . '/assets/vendor/bootstrap/bootstrap.purged.min.css') ?: 0),
         (int) (@filemtime(__DIR__ . '/assets/vendor/bootstrap/bootstrap.bundle.min.js') ?: 0),
-        (int) (@filemtime(__DIR__ . '/assets/vendor/bootstrap-icons/bootstrap-icons.css') ?: 0)
+        (int) (@filemtime(__DIR__ . '/assets/vendor/bootstrap-icons/bootstrap-icons.subset.css') ?: 0)
     );
 }
 
@@ -186,8 +190,6 @@ $twig->getEnvironment()->addGlobal('recaptcha_enabled', $recaptchaEnabled && $re
 $twig->getEnvironment()->addGlobal('recaptcha_site_key', $recaptchaSiteKey);
 $twig->getEnvironment()->addGlobal('recaptcha_action', $recaptchaAction !== '' ? $recaptchaAction : 'contact_submit');
 $twig->getEnvironment()->addGlobal('asset_version', $assetVersion);
-$twig->getEnvironment()->addGlobal('github_url', $_ENV['GITHUB_URL'] ?? '#');
-$twig->getEnvironment()->addGlobal('x_url', $_ENV['X_URL'] ?? '#');
 $twig->getEnvironment()->addGlobal('facebook_url', $_ENV['FACEBOOK_URL'] ?? '#');
 $twig->getEnvironment()->addGlobal('instagram_url', $_ENV['INSTAGRAM_URL'] ?? '#');
 $twig->getEnvironment()->addGlobal('whatsapp_url', $whatsappUrl);

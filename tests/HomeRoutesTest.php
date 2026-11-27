@@ -137,8 +137,10 @@ final class HomeRoutesTest extends TestCase
         self::assertSame('https://example.com/medico/', $structuredData['@graph'][0]['url'] ?? null);
     }
 
-    public function testHomeFallsBackToBluePaletteWhenQueryPaletteIsInvalid(): void
+    public function testHomeIgnoresInvalidQueryPaletteAndUsesConfiguredPalette(): void
     {
+        // Antes este teste se chamava "FallsBackToBlue" e só passava porque blue.css aparecia
+        // como <link rel="prefetch">; a paleta aplicada sempre foi a configurada (emerald).
         $app = TestAppFactory::create([
             'palette' => 'emerald',
             'base_url' => '/medico',
@@ -148,7 +150,9 @@ final class HomeRoutesTest extends TestCase
         $html = (string) $response->getBody();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertStringContainsString('/medico/assets/css/palettes/blue.css', $html);
+        self::assertMatchesRegularExpression('#href="/medico/assets/css/palettes/emerald\.css\?v=[^"]*"\s+rel="stylesheet"\s+id="paletteStylesheet"#', $html);
+        self::assertStringContainsString('data-palette-default="emerald"', $html);
+        self::assertStringNotContainsString('palettes/invalida.css', $html);
         self::assertSame('noindex, nofollow', $response->getHeaderLine('X-Robots-Tag'));
         self::assertStringContainsString('<meta name="robots" content="noindex, nofollow">', $html);
     }
@@ -237,6 +241,18 @@ final class HomeRoutesTest extends TestCase
         self::assertStringContainsString('<meta name="robots" content="noindex, nofollow">', $html);
     }
 
+    public function testHomeFallsBackToBluePaletteWhenConfiguredPaletteIsInvalid(): void
+    {
+        $app = TestAppFactory::create([
+            'palette' => 'inexistente',
+            'base_url' => '/medico',
+        ]);
+
+        $html = (string) $this->request($app, 'GET', '/medico/')->getBody();
+
+        self::assertMatchesRegularExpression('#href="/medico/assets/css/palettes/blue\.css\?v=[^"]*"\s+rel="stylesheet"\s+id="paletteStylesheet"#', $html);
+    }
+
     public function testHomeIsIndexableByDefault(): void
     {
         $app = TestAppFactory::create(['base_url' => '/medico']);
@@ -277,6 +293,7 @@ final class HomeRoutesTest extends TestCase
         self::assertStringNotContainsString('data-cta-id="nav_schedule"', $html);
         self::assertStringNotContainsString('id="copyModeToggle"', $html);
         self::assertStringNotContainsString('id="paletteFabToggle"', $html);
+        self::assertStringNotContainsString('rel="prefetch"', $html);
         self::assertStringNotContainsString('data-palette-btn="red"', $html);
         self::assertStringContainsString('/medico/assets/css/palettes/red.css', $html);
     }
@@ -360,6 +377,10 @@ final class HomeRoutesTest extends TestCase
         self::assertStringContainsString('id="paletteFabToggle"', $html);
         self::assertStringContainsString('data-palette-btn="emerald"', $html);
         self::assertStringContainsString('palette-dot-emerald active', $html);
+        // Com o seletor visível, as outras paletas são pré-carregadas para troca instantânea.
+        self::assertStringContainsString('rel="prefetch" href="/medico/assets/css/palettes/blue.css', $html);
+        self::assertStringContainsString('rel="prefetch" href="/medico/assets/css/palettes/red.css', $html);
+        self::assertStringNotContainsString('rel="prefetch" href="/medico/assets/css/palettes/emerald.css', $html);
     }
 
     public function testHomeRendersRecaptchaAssetsWhenEnabled(): void

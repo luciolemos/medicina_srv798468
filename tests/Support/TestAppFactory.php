@@ -46,8 +46,6 @@ final class TestAppFactory
         $twig->getEnvironment()->addGlobal('recaptcha_enabled', $config['recaptcha_enabled'] ?? false);
         $twig->getEnvironment()->addGlobal('recaptcha_site_key', $config['recaptcha_site_key'] ?? '');
         $twig->getEnvironment()->addGlobal('recaptcha_action', $config['recaptcha_action'] ?? 'contact_submit');
-        $twig->getEnvironment()->addGlobal('github_url', $config['github_url'] ?? '#');
-        $twig->getEnvironment()->addGlobal('x_url', $config['x_url'] ?? '#');
         $twig->getEnvironment()->addGlobal('instagram_url', $config['instagram_url'] ?? '#');
         $twig->getEnvironment()->addGlobal('whatsapp_url', $whatsappUrl);
         $twig->getEnvironment()->addGlobal('csp_nonce', $config['csp_nonce'] ?? 'test-nonce-aaaa');

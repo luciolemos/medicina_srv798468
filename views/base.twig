@@ -86,12 +86,14 @@
     data-palette-default="{{ palette ?? app_palette ?? 'blue' }}"
       data-palette-allowed="{{ (allowed_palettes ?? ['blue', 'red', 'emerald', 'amber', 'violet'])|json_encode|e('html_attr') }}"
   >
-   {% set warm_palettes = ['blue', 'red', 'emerald'] %}
-   {% for warm_palette in warm_palettes %}
-   {% if warm_palette != (palette ?? app_palette ?? 'blue') %}
-   <link rel="prefetch" href="{{ base_url }}/assets/css/palettes/{{ warm_palette }}.css?v={{ asset_version|default('1')|url_encode }}" as="style">
-   {% endif %}
-   {% endfor %}
+  {# Pré-carrega outras paletas só quando o seletor está visível (troca instantânea). #}
+  {% if show_palette_selector ?? false %}
+  {% for warm_palette in ['blue', 'red', 'emerald'] %}
+  {% if warm_palette != (palette ?? app_palette ?? 'blue') %}
+  <link rel="prefetch" href="{{ base_url }}/assets/css/palettes/{{ warm_palette }}.css?v={{ asset_version|default('1')|url_encode }}" as="style">
+  {% endif %}
+  {% endfor %}
+  {% endif %}
 
   {# reCAPTCHA (~750 KiB de JS) é carregado sob demanda pelo landing.js, quando o
      formulário se aproxima da tela ou recebe foco — ver loadRecaptcha(). #}

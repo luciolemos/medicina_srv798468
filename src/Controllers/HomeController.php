@@ -20,8 +20,6 @@ final class HomeController
     private const CSRF_SESSION_KEY     = 'contact_csrf_token';
     private const FORM_FLASH_KEY       = 'form_flash';
     private const HONEYPOT_FIELD       = 'website';
-    private const PALETTE_COOKIE_NAME  = 'palette';
-    private const PALETTE_COOKIE_TTL   = 31536000;
 
     public function __construct(
         private Twig $twig,
@@ -41,7 +39,6 @@ final class HomeController
         $shouldNoindex = $hasSeoVariantQuery || (bool) ($this->config['noindex'] ?? false);
 
         $palette = $this->resolvePalette($queryParams);
-        $this->persistPaletteCookie($palette);
 
         $flash = $this->pullFormFlash();
         if ($shouldNoindex) {
@@ -372,49 +369,21 @@ final class HomeController
             ->withStatus(302);
     }
 
+    /**
+     * Paleta ativa: ?palette= (demonstração) > APP_PALETTE > blue.
+     */
     private function resolvePalette(array $queryParams): string
     {
         $paletteFromQuery = strtolower((string) ($queryParams['palette'] ?? ''));
-        $paletteFromCookie = strtolower((string) ($_COOKIE[self::PALETTE_COOKIE_NAME] ?? ''));
         $paletteFromConfig = strtolower((string) ($this->config['palette'] ?? 'blue'));
 
-        foreach ([$paletteFromQuery, $paletteFromConfig, $paletteFromCookie] as $candidate) {
+        foreach ([$paletteFromQuery, $paletteFromConfig] as $candidate) {
             if (in_array($candidate, self::ALLOWED_PALETTES, true)) {
                 return $candidate;
             }
         }
 
         return 'blue';
-    }
-
-    private function persistPaletteCookie(string $palette): void
-    {
-        if (!in_array($palette, self::ALLOWED_PALETTES, true)) {
-            return;
-        }
-
-        if ((string) ($_COOKIE[self::PALETTE_COOKIE_NAME] ?? '') === $palette) {
-            return;
-        }
-
-        setcookie(self::PALETTE_COOKIE_NAME, $palette, [
-            'expires' => time() + self::PALETTE_COOKIE_TTL,
-            'path' => $this->resolveCookiePath(),
-            'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-            'httponly' => false,
-            'samesite' => 'Lax',
-        ]);
-    }
-
-    private function resolveCookiePath(): string
-    {
-        $base = trim((string) ($this->config['base_url'] ?? ''));
-        if ($base === '' || $base === '/') {
-            return '/';
-        }
-
-        $normalized = '/' . trim($base, '/');
-        return $normalized . '/';
     }
 
     private function hasSeoVariantQuery(array $queryParams): bool
