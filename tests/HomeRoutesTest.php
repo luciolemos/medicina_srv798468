@@ -252,7 +252,7 @@ final class HomeRoutesTest extends TestCase
         self::assertStringContainsString('Lei nº 13.709/2018', $html);
         self::assertStringContainsString('por até 15 dias', $html);
         self::assertStringContainsString('Google reCAPTCHA', $html);
-        self::assertStringContainsString('mailto:privacidade@example.com', $html);
+        self::assertStringContainsString('mailto:privacidade@natalcode.com.br', $html);
         self::assertStringContainsString('Dra. Ana Exemplo', $html);
         self::assertStringContainsString('href="/medico/"', $html);
         // Página informativa: sem formulário, sem JSON-LD e sem o script do reCAPTCHA.

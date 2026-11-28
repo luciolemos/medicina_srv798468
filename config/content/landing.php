@@ -107,9 +107,9 @@ return [
             'rqe' => '',
         ],
     ],
-    // Página /privacidade (LGPD). E-mail fictício (domínio reservado example.com).
+    // Página /privacidade (LGPD): e-mail do encarregado pelos dados.
     'privacy' => [
-        'contact_email' => 'privacidade@example.com',
+        'contact_email' => 'privacidade@natalcode.com.br',
         'updated_at' => '2026-11-27',
     ],
     'nav' => [
