@@ -90,7 +90,7 @@
           {{ hero.lead|default('Atendimento com escuta atenta, agenda organizada e orientação clara para o próximo passo.') }}
         </p>
 
-        <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3">
+        <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3 hero-actions">
           {% set primary_cta = hero.primary_cta|default({}) %}
           {% set secondary_cta = hero.secondary_cta|default({}) %}
           <a class="btn btn-primary btn-lg px-4 cta-track" href="{{ primary_cta.href|default('#form-orcamento') }}" data-cta-id="hero_primary">
@@ -360,11 +360,11 @@
       {% endif %}
 
       <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
-        <a class="btn btn-primary cta-track" href="#form-orcamento" data-cta-id="location_primary">
+        <a class="btn btn-primary btn-lg px-4 cta-track" href="#form-orcamento" data-cta-id="location_primary">
           {{ location.primary_label|default('Solicitar agendamento') }} <i class="bi bi-arrow-right-short"></i>
         </a>
         {% if location.map_link|default('') %}
-        <a class="btn btn-outline-light" href="{{ location.map_link }}" target="_blank" rel="noopener">
+        <a class="btn btn-outline-light btn-lg px-4" href="{{ location.map_link }}" target="_blank" rel="noopener">
           {{ location.secondary_label|default('Abrir no Google Maps') }} <i class="bi bi-box-arrow-up-right ms-1"></i>
         </a>
         {% endif %}
@@ -384,7 +384,7 @@
     </div>
 
     <div class="cta-box glass cta-box-no-bg p-4 p-lg-5 text-center">
-      <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 gap-sm-3">
+      <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 gap-sm-3 cta-actions">
         <a class="btn btn-primary btn-lg px-4 cta-track" href="#form-orcamento" data-cta-id="final_primary">
           {{ cta.primary_label|default('Solicitar agendamento') }} <i class="bi bi-calendar2-check ms-1"></i>
         </a>

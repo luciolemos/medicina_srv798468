@@ -490,6 +490,31 @@ pre,
   letter-spacing: var(--button-letter-spacing);
 }
 
+/* Botões de ação (topo, localização, agendamento, formulário): uma altura só.
+   Fonte menor que o 1.25rem do Bootstrap para os pares caberem lado a lado sem quebrar o texto. */
+.btn-lg {
+  min-height: 52px;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  border-radius: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Pares de botões que não cabem lado a lado nessas faixas: empilham com largura total. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .hero-actions {
+    flex-direction: column !important;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .cta-actions {
+    flex-direction: column !important;
+  }
+}
+
 .btn-primary {
   border: 1px solid rgba(var(--gradA), 0.56);
   color: #021425;
@@ -1546,11 +1571,6 @@ html.fx-ready .bg-blobs {
     font-size: 1rem;
   }
 
-  .btn-lg {
-    padding: 0.65rem 0.9rem;
-    font-size: 1rem;
-  }
-
   pre {
     font-size: 0.78rem;
   }
@@ -1563,6 +1583,12 @@ html.fx-ready .bg-blobs {
 @media (max-width: 576px) {
   .hero-proof {
     max-width: 100%;
+  }
+
+  /* Botões do formulário ocupam a largura toda (o "Voltar" já ocupa, pela coluna). */
+  #leadFormNext,
+  #leadFormSubmit {
+    flex: 1 1 auto;
   }
 
   /* Métricas seguem em 3 colunas, só mais compactas: empilhadas ocupavam
