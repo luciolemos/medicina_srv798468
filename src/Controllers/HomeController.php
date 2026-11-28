@@ -166,7 +166,7 @@ final class HomeController
         $requestId = $this->newRequestId();
 
         $recaptchaResult = $this->recaptchaVerifier->verify((string) ($post['recaptcha_token'] ?? ''), $clientIp);
-        if (!($recaptchaResult['ok'] ?? false)) {
+        if (!$recaptchaResult['ok']) {
             $reason = 'reCAPTCHA falhou: ' . (string) ($recaptchaResult['error'] ?? 'erro desconhecido');
             $this->leadLogger->persistEvent($eventId, $requestId, 'failure', $reason, $data, $clientIp, $userAgent);
             $this->setFormFlash([
@@ -264,7 +264,7 @@ final class HomeController
 
     private function isBotSubmission(array $post): bool
     {
-        $honeypot = trim((string) ($post['website'] ?? ''));
+        $honeypot = trim((string) ($post[self::HONEYPOT_FIELD] ?? ''));
         return $honeypot !== '';
     }
 
@@ -288,7 +288,7 @@ final class HomeController
             $forwardedFor = trim((string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''));
             if ($forwardedFor !== '') {
                 $parts = explode(',', $forwardedFor);
-                $first = trim((string) ($parts[0] ?? ''));
+                $first = trim($parts[0]);
                 if ($first !== '') {
                     $candidates[] = $first;
                 }
