@@ -11,6 +11,7 @@ use App\Contact\RecaptchaVerifier;
 use App\Controllers\HomeController;
 use App\Core\LandingContent;
 use App\Core\WhatsappLink;
+use App\Middleware\CanonicalHostMiddleware;
 use App\Middleware\SecurityHeadersMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
@@ -225,6 +226,10 @@ return static function (string $base): App {
 
     $app->addErrorMiddleware($isDev, $isDev, $isDev);
     $app->add(new SecurityHeadersMiddleware($cspNonce));
+    if ($publicHost !== '') {
+        // Último a entrar, primeiro a rodar: abre no domínio oficial antes de montar a página.
+        $app->add(new CanonicalHostMiddleware($app->getResponseFactory(), $publicOrigin, strtolower($publicHost), $base));
+    }
 
     $routes = require $root . '/routes/web.php';
     $routes($app, $controller);
