@@ -1488,10 +1488,6 @@ html.fx-ready .bg-blobs {
     font-size: 1rem;
   }
 
-  .hero-metrics {
-    grid-template-columns: 1fr;
-  }
-
   pre {
     font-size: 0.78rem;
   }
@@ -1506,8 +1502,23 @@ html.fx-ready .bg-blobs {
     max-width: 100%;
   }
 
+  /* Métricas seguem em 3 colunas, só mais compactas: empilhadas ocupavam
+     uma tela inteira sem acrescentar informação. */
   .hero-metrics {
-    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .metric {
+    padding: 0.7rem 0.4rem;
+  }
+
+  .metric-kpi {
+    font-size: 0.95rem;
+  }
+
+  .metric-label {
+    font-size: 0.76rem;
+    line-height: 1.25;
   }
 
   .whatsapp-float {

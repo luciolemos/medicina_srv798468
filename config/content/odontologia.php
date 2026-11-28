@@ -66,7 +66,7 @@ return [
         'lead' => 'Avaliação odontológica, prevenção, estética dental e acompanhamento com orientação clara, agenda organizada e condutas indicadas de forma responsável.',
         'primary_cta' => [
             'label' => 'Agendar avaliação',
-            'href' => '#cta',
+            'href' => '#form-orcamento',
             'icon' => 'arrow-right-short',
         ],
         'secondary_cta' => [

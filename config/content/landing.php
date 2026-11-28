@@ -71,7 +71,7 @@ return [
         'lead' => 'Consultas clínicas, check-ups preventivos e acompanhamento contínuo com escuta atenta, agenda organizada e orientação clara para o próximo passo do cuidado.',
         'primary_cta' => [
             'label' => 'Agendar consulta',
-            'href' => '#cta',
+            'href' => '#form-orcamento',
             'icon' => 'arrow-right-short',
         ],
         'secondary_cta' => [
@@ -80,7 +80,7 @@ return [
             'icon' => 'clipboard2-pulse',
         ],
         'trust_items' => [
-            ['icon' => 'shield-check', 'label' => 'Prontuário seguro'],
+            ['icon' => 'shield-check', 'label' => 'Sigilo profissional'],
             ['icon' => 'calendar2-check', 'label' => 'Horário agendado'],
             ['icon' => 'person-heart', 'label' => 'Escuta acolhedora'],
         ],
@@ -126,7 +126,7 @@ return [
         ],
         'metrics' => [
             ['kpi' => 'Seg-Sex', 'label' => 'Agenda clínica'],
-            ['kpi' => '24h', 'label' => 'Confirmação'],
+            ['kpi' => 'Hora', 'label' => 'Marcada'],
             ['kpi' => 'Retorno', 'label' => 'Acompanhado'],
         ],
     ],
