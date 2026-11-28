@@ -3,6 +3,56 @@
 declare(strict_types=1);
 
 return [
+    // brand:start — logo da marca no topo. create-landing.sh remove este bloco e
+    // public/assets/img/brand/ ao gerar landings de outra clínica.
+    'brand' => [
+        'logo' => [
+            'src' => 'assets/img/brand/medicare-logo.webp',
+            'src_2x' => 'assets/img/brand/medicare-logo@2x.webp',
+            'dark_src' => 'assets/img/brand/medicare-logo-dark.webp',
+            'dark_src_2x' => 'assets/img/brand/medicare-logo-dark@2x.webp',
+            'width' => 137,
+            'height' => 44,
+        ],
+        // Foto do topo (recorte com fundo transparente). Substitui hero.image.
+        'hero_image' => [
+            'src' => 'assets/img/brand/hero-540.webp',
+            'avif_sources' => [
+                ['path' => 'assets/img/brand/hero-360.avif', 'width' => 360],
+                ['path' => 'assets/img/brand/hero-540.avif', 'width' => 540],
+                ['path' => 'assets/img/brand/hero-720.avif', 'width' => 720],
+                ['path' => 'assets/img/brand/hero-900.avif', 'width' => 900],
+                ['path' => 'assets/img/brand/hero-1080.avif', 'width' => 1080],
+                ['path' => 'assets/img/brand/hero-1260.avif', 'width' => 1260],
+            ],
+            'sources' => [
+                ['path' => 'assets/img/brand/hero-360.webp', 'width' => 360],
+                ['path' => 'assets/img/brand/hero-540.webp', 'width' => 540],
+                ['path' => 'assets/img/brand/hero-720.webp', 'width' => 720],
+                ['path' => 'assets/img/brand/hero-900.webp', 'width' => 900],
+                ['path' => 'assets/img/brand/hero-1080.webp', 'width' => 1080],
+                ['path' => 'assets/img/brand/hero-1260.webp', 'width' => 1260],
+            ],
+            'sizes' => '(max-width: 575.98px) 92vw, 540px',
+            'width' => 1260,
+            'height' => 1229,
+            'alt' => 'Médica sorridente de jaleco com estetoscópio, de braços cruzados',
+            'cutout' => true,
+        ],
+        // Rosto da mesma médica, para o cartão de prova social do topo.
+        'proof_avatar' => [
+            'src' => 'assets/img/brand/doctor-avatar-56.webp',
+            'sources' => [
+                ['path' => 'assets/img/brand/doctor-avatar-56.webp', 'width' => 56],
+                ['path' => 'assets/img/brand/doctor-avatar-112.webp', 'width' => 112],
+                ['path' => 'assets/img/brand/doctor-avatar-168.webp', 'width' => 168],
+            ],
+            'sizes' => '56px',
+            'width' => 56,
+            'height' => 56,
+        ],
+    ],
+    // brand:end
     'seo' => [
         'title' => 'Clínica Médica | Atendimento médico com hora marcada',
         'description' => 'Clínica médica com consultas, check-ups preventivos e acompanhamento de saúde com atendimento humanizado.',
@@ -95,10 +145,11 @@ return [
                 'width' => 56,
                 'height' => 56,
             ],
+            // Mostra nome, cargo e registro de clinic.responsible no lugar do título.
+            'show_responsible' => true,
             'title' => 'Atendimento com continuidade',
             'lines' => [
-                'Da primeira consulta ao retorno, a equipe orienta exames, encaminhamentos e acompanhamento.',
-                'Canal direto para agendamento e confirmação.',
+                'Responde pela equipe médica e pelos protocolos da clínica.',
             ],
         ],
         'image' => [

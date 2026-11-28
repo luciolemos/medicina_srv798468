@@ -63,6 +63,21 @@ Os dois arquivos gerados são versionados. O `quality-gate` roda `build-icons-cs
 
 `scripts/create-landing.sh` regenera o subconjunto de ícones na cópia nova.
 
+## Logo e foto da marca
+
+Os originais ficam em `resources/brand/` (fora de `public/`, não são publicados). As versões servidas ficam em `public/assets/img/brand/` e são ligadas no bloco `brand` de `config/content/landing.php`. Para regenerá-las após trocar um original (ImageMagick com suporte a AVIF):
+
+```bash
+# Foto do topo: 6 larguras em AVIF e WebP
+convert resources/brand/hero.png -trim +repage /tmp/hero.png
+for w in 360 540 720 900 1080 1260; do
+  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 80 -define webp:alpha-quality=85 public/assets/img/brand/hero-$w.webp
+  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 55 public/assets/img/brand/hero-$w.avif
+done
+```
+
+O logo segue o mesmo processo em 44 px e 88 px de altura (`medicare-logo.webp` e `@2x`). A versão `-dark` troca os pixels verdes por `#e3efe7` para aparecer no tema escuro. Nichos não herdam o bloco `brand`, e o `create-landing.sh` remove o bloco, `public/assets/img/brand/` e `resources/brand/` ao gerar outra clínica.
+
 ## Criando uma nova landing
 
 1. Copie este projeto para o novo diretório, por exemplo `/var/www/pediatria`.

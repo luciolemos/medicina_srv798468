@@ -6,16 +6,12 @@
 {% set clinic_responsible = clinic.responsible|default({}) %}
 {% set privacy = content.privacy|default({}) %}
 {% set controller_name = privacy.controller|default(app_name|default('Clínica')) %}
-{% set app_logo = content.seo.schema.logo|default('assets/img/' ~ app_slug|default('medico') ~ '-mark.svg') %}
 {% set retention_days = lead_retention_days|default(30) %}
 
 {% block content %}
 <nav class="navbar navbar-dark fixed-top py-3 nav-glass" aria-label="Navegação principal">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center gap-2" href="{{ base_url }}/">
-      <img src="{{ base_url }}/{{ app_logo }}" alt="" class="navbar-logo" width="38" height="38" decoding="async">
-      <span class="fw-semibold">{{ app_name ?? 'Landing de saúde' }}</span>
-    </a>
+    {% include 'partials/brand.twig' with { show_brand_badge: false } %}
     <a class="btn btn-outline-light" href="{{ base_url }}/">
       <i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar ao site
     </a>

@@ -1,0 +1,48 @@
+{#
+  Marca do topo. Com content.brand.logo definido, mostra o logo da clínica (com versão
+  clara para o tema escuro, se houver); sem ele, mostra o ícone do nicho + nome + selo.
+#}
+{% set brand_logo = landing_content.brand.logo|default({}) %}
+{% set brand_mark = landing_content.seo.schema.logo|default('assets/img/' ~ app_slug|default('medico') ~ '-mark.svg') %}
+{% set brand_name = app_name ?? 'Landing de saúde' %}
+{% if brand_logo.src|default('') %}
+<a class="navbar-brand d-flex align-items-center{{ brand_logo.dark_src|default('') ? ' has-dark-logo' : '' }}" href="{{ base_url }}/">
+  <img
+    src="{{ base_url }}/{{ brand_logo.src }}"
+    {% if brand_logo.src_2x|default('') %}srcset="{{ base_url }}/{{ brand_logo.src }} 1x, {{ base_url }}/{{ brand_logo.src_2x }} 2x"{% endif %}
+    alt="{{ brand_name }}"
+    class="brand-logo brand-logo-light"
+    width="{{ brand_logo.width }}"
+    height="{{ brand_logo.height }}"
+    decoding="async"
+  >
+  {% if brand_logo.dark_src|default('') %}
+  <img
+    src="{{ base_url }}/{{ brand_logo.dark_src }}"
+    {% if brand_logo.dark_src_2x|default('') %}srcset="{{ base_url }}/{{ brand_logo.dark_src }} 1x, {{ base_url }}/{{ brand_logo.dark_src_2x }} 2x"{% endif %}
+    alt="{{ brand_name }}"
+    class="brand-logo brand-logo-dark"
+    width="{{ brand_logo.width }}"
+    height="{{ brand_logo.height }}"
+    decoding="async"
+  >
+  {% endif %}
+</a>
+{% else %}
+<a class="navbar-brand d-flex align-items-center gap-2" href="{{ base_url }}/">
+  <img
+    src="{{ base_url }}/{{ brand_mark }}"
+    alt="{{ show_brand_badge ?? true ? brand_name : '' }}"
+    class="navbar-logo"
+    width="38"
+    height="38"
+    decoding="async"
+  >
+  <span class="fw-semibold">{{ brand_name }}</span>
+  {% if show_brand_badge ?? true %}
+  <span class="badge rounded-pill text-bg-primary-subtle border border-primary-subtle ms-2 d-none d-sm-inline">
+    {{ app_badge ?? landing_content.nav.badge|default('Atendimento') }}
+  </span>
+  {% endif %}
+</a>
+{% endif %}

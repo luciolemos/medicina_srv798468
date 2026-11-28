@@ -47,6 +47,29 @@ final class HomeRoutesTest extends TestCase
         self::assertMatchesRegularExpression('/name="csrf_token" value="[a-f0-9]{64}"/', $html);
     }
 
+    public function testNicheWithoutOwnBrandShowsMarkAndNameInsteadOfLogo(): void
+    {
+        $app = TestAppFactory::create([
+            'base_url' => '',
+            'landing_content' => \App\Core\LandingContent::load(dirname(__DIR__), 'pediatria', 'pediatria'),
+        ]);
+
+        $html = (string) $this->request($app, 'GET', '/')->getBody();
+
+        self::assertStringNotContainsString('brand-logo', $html);
+        self::assertStringNotContainsString('medicare-logo', $html);
+        self::assertStringContainsString('class="navbar-logo"', $html);
+        self::assertStringContainsString('src="/assets/img/hero/pediatria-640.webp"', $html);
+        self::assertStringContainsString('media="(max-width: 576px)"', $html);
+        self::assertStringNotContainsString('hero-media-cutout', $html);
+        self::assertStringNotContainsString('image/avif', $html);
+        // Nicho sem foto própria: identifica o responsável, mas sem avatar de outra pessoa.
+        self::assertStringContainsString('hero-proof-authority', $html);
+        self::assertStringNotContainsString('doctor-avatar', $html);
+        self::assertStringNotContainsString('proof-avatars', $html);
+        self::assertStringNotContainsString('RQE RQE', $html);
+    }
+
     public function testHomeRendersCorrectAssetPathsWhenBasePathIsEmpty(): void
     {
         $app = TestAppFactory::create([
@@ -61,10 +84,16 @@ final class HomeRoutesTest extends TestCase
         self::assertStringContainsString('<title>Clínica Médica | Root</title>', $html);
         self::assertStringContainsString('href="/assets/css/landing.css?v=', $html);
         self::assertStringContainsString('href="/assets/img/medico-mark.svg"', $html);
-        self::assertStringContainsString('src="/assets/img/medico-mark.svg"', $html);
-        self::assertStringContainsString('src="/assets/img/hero/medico-640.webp"', $html);
-        self::assertStringContainsString('media="(max-width: 576px)"', $html);
-        self::assertStringContainsString('/assets/img/hero/medico-mobile-640.webp', $html);
+        self::assertStringContainsString('src="/assets/img/brand/medicare-logo.webp"', $html);
+        self::assertStringContainsString('/assets/img/brand/medicare-logo-dark@2x.webp 2x', $html);
+        self::assertStringContainsString('class="navbar-brand d-flex align-items-center has-dark-logo" href="/"', $html);
+        self::assertStringContainsString('src="/assets/img/brand/hero-540.webp"', $html);
+        self::assertStringContainsString('type="image/avif"', $html);
+        self::assertStringContainsString('/assets/img/brand/hero-1260.avif 1260w', $html);
+        self::assertStringContainsString('class="p-0 hero-media hero-media-cutout"', $html);
+        self::assertStringContainsString('class="hero-proof glass mt-3 hero-proof-authority"', $html);
+        self::assertStringContainsString('/assets/img/brand/doctor-avatar-112.webp 112w', $html);
+        self::assertMatchesRegularExpression('#<span class="proof-registry">\s*Diretora técnica · CRM/RN 00000\s*</span>#u', $html);
         self::assertStringNotContainsString('assets/img/clinic-mark.svg', $html);
         self::assertStringNotContainsString('assets/img/img_default_640.webp', $html);
         self::assertStringNotContainsString('//assets/', $html);
