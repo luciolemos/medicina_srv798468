@@ -59,7 +59,7 @@ final class HomeRoutesTest extends TestCase
         self::assertStringNotContainsString('brand-logo', $html);
         self::assertStringNotContainsString('medicare-logo', $html);
         self::assertStringContainsString('class="navbar-logo"', $html);
-        self::assertStringContainsString('src="/assets/img/hero/pediatria-640.webp"', $html);
+        self::assertStringContainsString('src="/assets/img/pediatria/hero-640.webp"', $html);
         self::assertStringContainsString('media="(max-width: 576px)"', $html);
         self::assertStringNotContainsString('hero-media-cutout', $html);
         self::assertStringNotContainsString('image/avif', $html);
@@ -68,7 +68,7 @@ final class HomeRoutesTest extends TestCase
         self::assertStringNotContainsString('doctor-avatar', $html);
         self::assertStringNotContainsString('proof-avatars', $html);
         self::assertStringNotContainsString('RQE RQE', $html);
-        self::assertStringContainsString('<link rel="icon" href="/assets/img/pediatria-mark.svg">', $html);
+        self::assertStringContainsString('<link rel="icon" href="/assets/img/pediatria/mark.svg">', $html);
         self::assertStringNotContainsString('rel="manifest"', $html);
     }
 
@@ -85,18 +85,18 @@ final class HomeRoutesTest extends TestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertStringContainsString('<title>Clínica Médica | Root</title>', $html);
         self::assertStringContainsString('href="/assets/css/landing.css?v=', $html);
-        self::assertStringContainsString('<link rel="icon" href="/assets/img/brand/favicon.ico" sizes="48x48 32x32 16x16">', $html);
-        self::assertStringContainsString('<link rel="apple-touch-icon" href="/assets/img/brand/apple-touch-icon.png">', $html);
-        self::assertStringContainsString('<link rel="manifest" href="/assets/img/brand/site.webmanifest">', $html);
-        self::assertStringContainsString('src="/assets/img/brand/medicare-logo.webp"', $html);
-        self::assertStringContainsString('/assets/img/brand/medicare-logo-dark@2x.webp 2x', $html);
+        self::assertStringContainsString('<link rel="icon" href="/assets/img/medico/icons/favicon.ico" sizes="48x48 32x32 16x16">', $html);
+        self::assertStringContainsString('<link rel="apple-touch-icon" href="/assets/img/medico/icons/apple-touch-icon.png">', $html);
+        self::assertStringContainsString('<link rel="manifest" href="/assets/img/medico/icons/site.webmanifest">', $html);
+        self::assertStringContainsString('src="/assets/img/medico/logo.webp"', $html);
+        self::assertStringContainsString('/assets/img/medico/logo-dark@2x.webp 2x', $html);
         self::assertStringContainsString('class="navbar-brand d-flex align-items-center has-dark-logo" href="/"', $html);
-        self::assertStringContainsString('src="/assets/img/brand/hero-540.webp"', $html);
+        self::assertStringContainsString('src="/assets/img/medico/foto-540.webp"', $html);
         self::assertStringContainsString('type="image/avif"', $html);
-        self::assertStringContainsString('/assets/img/brand/hero-1260.avif 1260w', $html);
+        self::assertStringContainsString('/assets/img/medico/foto-1260.avif 1260w', $html);
         self::assertStringContainsString('class="p-0 hero-media hero-media-cutout"', $html);
         self::assertStringContainsString('class="hero-proof glass mt-3 hero-proof-authority"', $html);
-        self::assertStringContainsString('/assets/img/brand/doctor-avatar-112.webp 112w', $html);
+        self::assertStringContainsString('/assets/img/medico/avatar-112.webp 112w', $html);
         self::assertMatchesRegularExpression('#<span class="proof-registry">\s*Diretora técnica · CRM/RN 00000\s*</span>#u', $html);
         self::assertStringNotContainsString('assets/img/clinic-mark.svg', $html);
         self::assertStringNotContainsString('assets/img/img_default_640.webp', $html);
@@ -139,13 +139,13 @@ final class HomeRoutesTest extends TestCase
         self::assertStringContainsString('<link rel="canonical" href="http://localhost/medico/">', $decodedHtml);
         self::assertStringContainsString('<meta property="og:type" content="website">', $decodedHtml);
         self::assertStringContainsString('<meta property="og:title" content="Clínica Médica | Teste">', $decodedHtml);
-        self::assertStringContainsString('<meta property="og:image" content="http://localhost/medico/assets/img/social/medico-og.jpg">', $decodedHtml);
+        self::assertStringContainsString('<meta property="og:image" content="http://localhost/medico/assets/img/medico/og.jpg">', $decodedHtml);
         self::assertStringContainsString('<meta name="twitter:card" content="summary_large_image">', $decodedHtml);
 
         self::assertSame('https://schema.org', $structuredData['@context'] ?? null);
         self::assertSame('MedicalClinic', $structuredData['@graph'][0]['@type'] ?? null);
         self::assertSame('http://localhost/medico/', $structuredData['@graph'][0]['url'] ?? null);
-        self::assertSame('http://localhost/medico/assets/img/brand/medicare-logo-600.png', $structuredData['@graph'][0]['logo'] ?? null);
+        self::assertSame('http://localhost/medico/assets/img/medico/logo-600.png', $structuredData['@graph'][0]['logo'] ?? null);
         self::assertSame('+5584999031906', $structuredData['@graph'][0]['telephone'] ?? null);
         self::assertSame(['https://facebook.com/clinica-medica'], $structuredData['@graph'][0]['sameAs'] ?? []);
         self::assertSame('OfferCatalog', $structuredData['@graph'][0]['hasOfferCatalog']['@type'] ?? null);
@@ -166,7 +166,7 @@ final class HomeRoutesTest extends TestCase
 
         self::assertSame(200, $response->getStatusCode());
         self::assertStringContainsString('<link rel="canonical" href="https://example.com/medico/">', $decodedHtml);
-        self::assertStringContainsString('<meta property="og:image" content="https://example.com/medico/assets/img/social/medico-og.jpg">', $decodedHtml);
+        self::assertStringContainsString('<meta property="og:image" content="https://example.com/medico/assets/img/medico/og.jpg">', $decodedHtml);
         self::assertSame('https://example.com/medico/', $structuredData['@graph'][0]['url'] ?? null);
     }
 
