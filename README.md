@@ -76,6 +76,8 @@ for w in 360 540 720 900 1080 1260; do
 done
 ```
 
+O favicon (`favicon.ico` com 16, 32 e 48 px), os ícones de atalho (`icon-192/512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`) e o `site.webmanifest` usam a cruz do logo sobre fundo branco, que aparece bem em abas claras e escuras. O `medicare-logo-600.png` é o logo dos dados estruturados (JSON-LD).
+
 O logo segue o mesmo processo em 44 px e 88 px de altura (`medicare-logo.webp` e `@2x`). A versão `-dark` troca os pixels verdes por `#e3efe7` para aparecer no tema escuro. Nichos não herdam o bloco `brand`, e o `create-landing.sh` remove o bloco, `public/assets/img/brand/` e `resources/brand/` ao gerar outra clínica.
 
 ## Criando uma nova landing

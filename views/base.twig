@@ -59,9 +59,21 @@
   })();
   </script>
 
+  {% set brand_icons = landing_content.brand.icons|default({}) %}
+  {% if brand_icons.ico|default('') %}
+  <link rel="icon" href="{{ base_url }}/{{ brand_icons.ico }}" sizes="48x48 32x32 16x16">
+  {% if brand_icons.png_192|default('') %}
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ base_url }}/{{ brand_icons.png_192 }}">
+  {% endif %}
+  <link rel="apple-touch-icon" href="{{ base_url }}/{{ brand_icons.apple_touch|default(brand_icons.ico) }}">
+  {% if brand_icons.manifest|default('') %}
+  <link rel="manifest" href="{{ base_url }}/{{ brand_icons.manifest }}">
+  {% endif %}
+  {% else %}
   <link rel="icon" href="{{ base_url }}/{{ app_logo }}">
   <link rel="shortcut icon" href="{{ base_url }}/{{ app_logo }}">
   <link rel="apple-touch-icon" href="{{ base_url }}/{{ app_logo }}">
+  {% endif %}
 
   {# ==============================
      CSS — LIBS

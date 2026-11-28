@@ -4,6 +4,11 @@ Options -Indexes
   Require all denied
 </FilesMatch>
 
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType image/x-icon .ico
+</IfModule>
+
 <IfModule mod_headers.c>
   Header append Vary Accept-Encoding
 
