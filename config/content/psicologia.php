@@ -3,6 +3,61 @@
 declare(strict_types=1);
 
 return [
+    // Marca EMOTION (demonstração). Originais em resources/brand/psicologia/.
+    'brand' => [
+        'logo' => [
+            'src' => 'assets/img/psicologia/logo.webp',
+            'src_2x' => 'assets/img/psicologia/logo@2x.webp',
+            'dark_src' => 'assets/img/psicologia/logo-dark.webp',
+            'dark_src_2x' => 'assets/img/psicologia/logo-dark@2x.webp',
+            'width' => 137,
+            'height' => 44,
+        ],
+        // Foto do topo (recorte com fundo transparente). Substitui hero.image.
+        'hero_image' => [
+            'src' => 'assets/img/psicologia/foto-540.webp',
+            'avif_sources' => [
+                ['path' => 'assets/img/psicologia/foto-360.avif', 'width' => 360],
+                ['path' => 'assets/img/psicologia/foto-540.avif', 'width' => 540],
+                ['path' => 'assets/img/psicologia/foto-720.avif', 'width' => 720],
+                ['path' => 'assets/img/psicologia/foto-900.avif', 'width' => 900],
+                ['path' => 'assets/img/psicologia/foto-1080.avif', 'width' => 1080],
+            ],
+            'sources' => [
+                ['path' => 'assets/img/psicologia/foto-360.webp', 'width' => 360],
+                ['path' => 'assets/img/psicologia/foto-540.webp', 'width' => 540],
+                ['path' => 'assets/img/psicologia/foto-720.webp', 'width' => 720],
+                ['path' => 'assets/img/psicologia/foto-900.webp', 'width' => 900],
+                ['path' => 'assets/img/psicologia/foto-1080.webp', 'width' => 1080],
+            ],
+            'sizes' => '(max-width: 575.98px) 92vw, 540px',
+            'width' => 1080,
+            'height' => 1169,
+            'alt' => 'Psicóloga sorridente de jaleco, de braços cruzados',
+            'cutout' => true,
+        ],
+        // Rosto da mesma psicóloga, para o cartão de prova social do topo.
+        'proof_avatar' => [
+            'src' => 'assets/img/psicologia/avatar-56.webp',
+            'sources' => [
+                ['path' => 'assets/img/psicologia/avatar-56.webp', 'width' => 56],
+                ['path' => 'assets/img/psicologia/avatar-112.webp', 'width' => 112],
+                ['path' => 'assets/img/psicologia/avatar-168.webp', 'width' => 168],
+            ],
+            'sizes' => '56px',
+            'width' => 56,
+            'height' => 56,
+        ],
+        // Favicon e ícones de atalho (símbolo do logo sobre fundo branco).
+        'icons' => [
+            'ico' => 'assets/img/psicologia/icons/favicon.ico',
+            'png_192' => 'assets/img/psicologia/icons/icon-192.png',
+            'apple_touch' => 'assets/img/psicologia/icons/apple-touch-icon.png',
+            'manifest' => 'assets/img/psicologia/icons/site.webmanifest',
+        ],
+        // Logo usado nos dados estruturados (JSON-LD) no lugar de seo.schema.logo.
+        'schema_logo' => 'assets/img/psicologia/logo-600.png',
+    ],
     'seo' => [
         'title' => 'Clínica de Psicologia | Atendimento psicológico com escuta qualificada',
         'description' => 'Psicologia com escuta acolhedora, atendimento individual e acompanhamento com privacidade, clareza e organização.',

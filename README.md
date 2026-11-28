@@ -101,6 +101,15 @@ O favicon (`favicon.ico` com 16, 32 e 48 px), os ícones de atalho (`icon-192/51
 
 O logo segue o mesmo processo em 44 px e 88 px de altura (`logo.webp` e `@2x`). A versão `-dark` troca os pixels verdes por `#e3efe7` para aparecer no tema escuro. Nichos não herdam o bloco `brand`, e o `create-landing.sh` remove o bloco, `public/assets/img/medico/` e `resources/brand/` ao gerar outra clínica.
 
+## Marca da psicologia (EMOTION)
+
+Mesmo kit do Medicare, em `public/assets/img/psicologia/`, ligado no bloco `brand` de `config/content/psicologia.php`. Originais em `resources/brand/psicologia/` (`hero.png`, `logo.png`).
+
+- **Foto**: `-trim`, 5 larguras (360 a 1080; o original tem 1181 px, então não há 1260) em WebP e AVIF.
+- **Logo**: pixels com alfa < 10% zerados antes (o original tem um reflexo quase invisível sob o texto), `-trim`, 44 e 88 px de altura; `-dark` troca os verdes por `#e3efe7`; `logo-600.png` em paleta de 256 cores.
+- **Avatar**: recorte 540 × 540 do rosto na foto, sobre `#f5efe6`, em 56/112/168 px.
+- **Ícones**: símbolo (cabeça com ψ) recortado do logo, sobre fundo branco; `favicon.ico` 16/32/48, `icon-192/512`, `icon-maskable-512` (símbolo em ~62%) e `apple-touch-icon` 180.
+
 ## Criando uma nova landing
 
 1. Copie este projeto para o novo diretório, por exemplo `/var/www/pediatria`.
