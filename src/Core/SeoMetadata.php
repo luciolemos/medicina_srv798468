@@ -62,7 +62,12 @@ final class SeoMetadata
             'image' => $meta['image']['url'] ?? '',
         ];
 
-        $logo = $this->firstNonEmpty($schema['logo'] ?? null, 'assets/img/' . $this->slug() . '-mark.svg');
+        $brand = $this->arrayValue($this->content['brand'] ?? []);
+        $logo = $this->firstNonEmpty(
+            $brand['schema_logo'] ?? null,
+            $schema['logo'] ?? null,
+            'assets/img/' . $this->slug() . '-mark.svg'
+        );
         if ($logo !== '') {
             $business['logo'] = $this->absolutePublicUrl($logo);
         }

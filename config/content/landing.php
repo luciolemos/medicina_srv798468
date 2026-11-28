@@ -51,6 +51,15 @@ return [
             'width' => 56,
             'height' => 56,
         ],
+        // Favicon e ícones de atalho (cruz do logo sobre fundo branco).
+        'icons' => [
+            'ico' => 'assets/img/brand/favicon.ico',
+            'png_192' => 'assets/img/brand/icon-192.png',
+            'apple_touch' => 'assets/img/brand/apple-touch-icon.png',
+            'manifest' => 'assets/img/brand/site.webmanifest',
+        ],
+        // Logo usado nos dados estruturados (JSON-LD) no lugar de seo.schema.logo.
+        'schema_logo' => 'assets/img/brand/medicare-logo-600.png',
     ],
     // brand:end
     'seo' => [
