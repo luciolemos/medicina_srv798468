@@ -3,7 +3,9 @@
 {% set content = landing_content|default({}) %}
 {% set seo = content.seo|default({}) %}
 {% set hero = content.hero|default({}) %}
-{% set hero_image = hero.image|default({}) %}
+{# A foto da marca (content.brand.hero_image) tem prioridade sobre a foto do nicho. #}
+{% set hero_image = content.brand.hero_image|default(hero.image|default({})) %}
+{% set hero_avif_sources = hero_image.avif_sources|default([]) %}
 {% set hero_sources = hero_image.sources|default([]) %}
 {% set hero_fallback_slug = app_slug|default('medico') %}
 {% set hero_image_src = hero_image.src|default('assets/img/hero/' ~ hero_fallback_slug ~ '-640.webp') %}
@@ -26,12 +28,18 @@
   fetchpriority="high"
 >
 {% endif %}
+{# Com AVIF, pré-carrega o AVIF (type= faz navegadores sem suporte ignorarem a dica). #}
 <link
   rel="preload"
   as="image"
   {% if hero_mobile.src|default('') %}media="{{ hero_image.desktop_media|default('(min-width: 577px)') }}"{% endif %}
+  {% if hero_avif_sources %}
+  type="image/avif"
+  imagesrcset="{% for source in hero_avif_sources %}{{ base_url }}/{{ source.path }} {{ source.width }}w{{ loop.last ? '' : ', ' }}{% endfor %}"
+  {% else %}
   href="{{ base_url }}/{{ hero_image_src }}"
   imagesrcset="{% for source in hero_sources %}{{ base_url }}/{{ source.path }} {{ source.width }}w{{ loop.last ? '' : ', ' }}{% endfor %}"
+  {% endif %}
   imagesizes="{{ hero_image_sizes }}"
   fetchpriority="high"
 >
@@ -102,9 +110,16 @@
         </div>
 
         {% set proof = hero.proof|default({}) %}
-        {% set proof_avatar = proof.avatar|default({}) %}
+        {# Prova por autoridade: com proof.show_responsible, o cartão identifica o responsável
+           técnico (clinic.responsible) e usa a foto da marca, se houver. #}
+        {% set proof_avatar = content.brand.proof_avatar|default(proof.avatar|default({})) %}
+        {% set proof_person = proof.show_responsible|default(false) ? content.clinic.responsible|default({}) : {} %}
+        {# Nome de uma pessoa ao lado do rosto de outra engana: sem foto da marca, fica sem avatar. #}
+        {% if proof_person.name|default('') and not content.brand.proof_avatar|default({}) %}
+          {% set proof_avatar = {} %}
+        {% endif %}
         {% set proof_avatar_sources = proof_avatar.sources|default([]) %}
-        <div class="hero-proof glass mt-3">
+        <div class="hero-proof glass mt-3{{ proof_person.name|default('') ? ' hero-proof-authority' : '' }}">
           {% if proof_avatar.src|default('') %}
           <div class="proof-avatars" aria-hidden="true">
             <img
@@ -121,7 +136,14 @@
           </div>
           {% endif %}
           <div class="proof-copy">
+            {% if proof_person.name|default('') %}
+            <strong>{{ proof_person.name }}</strong>
+            <span class="proof-registry">
+              {{ proof_person.role|default('Responsável técnico') }}{% if proof_person.registry|default('') %} · {{ proof_person.registry }}{% endif %}{% if proof_person.rqe|default('') %} · {{ proof_person.rqe }}{% endif %}
+            </span>
+            {% else %}
             <strong>{{ proof.title|default('Atendimento com continuidade') }}</strong>
+            {% endif %}
             {% for line in proof.lines|default([]) %}
             <span>{{ line }}</span>
             {% endfor %}
@@ -130,7 +152,7 @@
       </div>
 
       <div class="col-lg-6">
-        <div class="p-0 hero-media">
+        <div class="p-0 hero-media{{ hero_image.cutout|default(false) ? ' hero-media-cutout' : '' }}">
           <picture>
             {% if hero_mobile.src|default('') %}
             <source
@@ -138,6 +160,13 @@
               media="{{ hero_mobile_media }}"
               srcset="{% for source in hero_mobile_sources %}{{ base_url }}/{{ source.path }} {{ source.width }}w{{ loop.last ? '' : ', ' }}{% endfor %}"
               sizes="{{ hero_mobile.sizes|default('92vw') }}"
+            >
+            {% endif %}
+            {% if hero_avif_sources %}
+            <source
+              type="image/avif"
+              srcset="{% for source in hero_avif_sources %}{{ base_url }}/{{ source.path }} {{ source.width }}w{{ loop.last ? '' : ', ' }}{% endfor %}"
+              sizes="{{ hero_image_sizes }}"
             >
             {% endif %}
             <source
@@ -331,7 +360,7 @@
       {% endif %}
 
       <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
-        <a class="btn btn-primary cta-track" href="#cta" data-cta-id="location_primary">
+        <a class="btn btn-primary cta-track" href="#form-orcamento" data-cta-id="location_primary">
           {{ location.primary_label|default('Solicitar agendamento') }} <i class="bi bi-arrow-right-short"></i>
         </a>
         {% if location.map_link|default('') %}

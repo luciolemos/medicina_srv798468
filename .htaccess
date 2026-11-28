@@ -1,6 +1,6 @@
 Options -Indexes
 
-<FilesMatch "^\.|^(?:composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit\.xml|README\.md|.*\.log)$">
+<FilesMatch "^\.|^(?:composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit\.xml|phpstan\.neon|README\.md|.*\.log)$">
   Require all denied
 </FilesMatch>
 

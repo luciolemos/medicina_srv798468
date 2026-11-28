@@ -6,7 +6,7 @@ Protótipo de landing page para serviços de saúde, pronto para derivar projeto
 
 - PHP 8.3 ou 8.4
 - Composer
-- Node.js somente para testes E2E com Playwright
+- Node.js para testes E2E (Playwright), Lighthouse e para regenerar o Bootstrap reduzido (PurgeCSS via `npx`)
 
 ## Configuração
 
@@ -42,6 +42,42 @@ bash scripts/dev-local.sh
 
 Abra `http://127.0.0.1:8000/`.
 
+## Estrutura do código
+
+- `public/index.php`: ponto de entrada. Carrega o `.env`, abre a sessão e o autoload, e roda o app.
+- `config/app.php`: monta o app (conteúdo, Twig e globais, reCAPTCHA, rate limit, e-mail, log de leads, controller, middlewares e rotas). É aqui que se liga um serviço novo.
+- `routes/web.php`: rotas (`/`, `/privacidade`, envio do formulário).
+- `src/`: controller, serviços do formulário (`Contact/`), SEO e conteúdo (`Core/`) e middleware de cabeçalhos de segurança.
+- `views/`: templates Twig. `config/content/`: textos de cada nicho.
+
+## Assets de CSS reduzidos
+
+A página não carrega o Bootstrap nem o Bootstrap Icons completos, e sim versões reduzidas geradas a partir do que os templates usam. Isso mantém o LCP dentro do perfil `strict` do Lighthouse.
+
+| Arquivo carregado | Gerado por | Quando rodar |
+|---|---|---|
+| `public/assets/vendor/bootstrap-icons/bootstrap-icons.subset.css` | `php scripts/build-icons-css.php` | ao usar um ícone `bi-*` novo em template, JS ou conteúdo |
+| `public/assets/vendor/bootstrap/bootstrap.purged.min.css` | `bash scripts/build-bootstrap-css.sh` | ao usar uma classe do Bootstrap que ainda não aparecia no projeto |
+
+Os dois arquivos gerados são versionados. O `quality-gate` roda `build-icons-css.php --check` e falha se o subconjunto de ícones estiver desatualizado. Classes que o JavaScript adiciona em tempo de execução precisam estar na *safelist* de `build-bootstrap-css.sh`.
+
+`scripts/create-landing.sh` regenera o subconjunto de ícones na cópia nova.
+
+## Logo e foto da marca
+
+Os originais ficam em `resources/brand/` (fora de `public/`, não são publicados). As versões servidas ficam em `public/assets/img/brand/` e são ligadas no bloco `brand` de `config/content/landing.php`. Para regenerá-las após trocar um original (ImageMagick com suporte a AVIF):
+
+```bash
+# Foto do topo: 6 larguras em AVIF e WebP
+convert resources/brand/hero.png -trim +repage /tmp/hero.png
+for w in 360 540 720 900 1080 1260; do
+  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 80 -define webp:alpha-quality=85 public/assets/img/brand/hero-$w.webp
+  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 55 public/assets/img/brand/hero-$w.avif
+done
+```
+
+O logo segue o mesmo processo em 44 px e 88 px de altura (`medicare-logo.webp` e `@2x`). A versão `-dark` troca os pixels verdes por `#e3efe7` para aparecer no tema escuro. Nichos não herdam o bloco `brand`, e o `create-landing.sh` remove o bloco, `public/assets/img/brand/` e `resources/brand/` ao gerar outra clínica.
+
 ## Criando uma nova landing
 
 1. Copie este projeto para o novo diretório, por exemplo `/var/www/pediatria`.
@@ -62,8 +98,10 @@ Quando existir um arquivo de nicho com o mesmo slug, como `config/content/pediat
 ## Testes
 
 ```bash
-composer test
-npx playwright test
+composer test          # PHPUnit
+composer analyse       # PHPStan (nível 5, ver phpstan.neon)
+npx playwright test    # E2E
+bash scripts/quality-gate.sh   # tudo o que o CI roda antes dos testes de navegador
 ```
 
 Os scripts em `scripts/` também mantêm smoke tests de paleta, formulário e frontend para ambientes publicados.
@@ -95,7 +133,7 @@ php scripts/prune-lead-data.php --days 30 --dry-run
 
 O conteúdo principal está em:
 
-- `config/content/landing.php`
+- `config/content/landing.php`: inclui os blocos `clinic` (endereço, horários, responsável técnico com registro no conselho, exigido pela Resolução CFM nº 2.336/2023) e `privacy` (e-mail do encarregado), que alimentam o rodapé, o JSON-LD e a página `/privacidade`. Os valores de exemplo (`Exemplo`, `00000`, `@example.com`) aparecem como `[info]` no `validate-landing-content.php` até serem trocados pelos reais.
 - `views/partials/navbar.twig`
 - `views/partials/footer.twig`
 - `public/assets/img/`
@@ -112,4 +150,4 @@ Os conteúdos de nicho versionados são `config/content/pediatria.php`, `config/
 
 As imagens principais seguem nomes padronizados: `public/assets/img/hero/{slug}-640.webp`, `{slug}-960.webp`, `{slug}-1896.webp`, `{slug}-mobile-640.webp`, `public/assets/img/social/{slug}-og.jpg` e `public/assets/img/{slug}-mark.svg`. O corte mobile é vertical para preservar o rosto/atendimento em telas estreitas. O gerador renomeia os placeholders para o slug novo; depois substitua esses arquivos por imagens finais do nicho.
 
-Após alterar templates em produção, limpe o cache Twig em `storage/cache/twig` ou rode o script de pós-update.
+O Twig roda com `auto_reload`, então templates alterados por deploy são recompilados sozinhos; não é preciso limpar `storage/cache/twig`.

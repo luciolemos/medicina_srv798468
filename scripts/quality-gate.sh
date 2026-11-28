@@ -15,7 +15,10 @@ composer audit
 echo "[step] PHP lint"
 while IFS= read -r -d '' file; do
   php -l "$file" >/dev/null
-done < <(find src public routes scripts -type f -name '*.php' -print0)
+done < <(find src public routes scripts config -type f -name '*.php' -print0)
+
+echo "[step] Análise estática (PHPStan)"
+vendor/bin/phpstan analyse --no-progress
 
 echo "[step] Landing content validation"
 while IFS= read -r -d '' file; do

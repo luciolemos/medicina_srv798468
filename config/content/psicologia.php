@@ -66,7 +66,7 @@ return [
         'lead' => 'Atendimento psicológico individual com escuta qualificada, organização do cuidado e uma presença clínica acolhedora para atravessar ansiedade, sobrecarga, conflitos e processos de mudança com mais estabilidade.',
         'primary_cta' => [
             'label' => 'Marcar primeiro atendimento',
-            'href' => '#cta',
+            'href' => '#form-orcamento',
             'icon' => 'arrow-right-short',
         ],
         'secondary_cta' => [

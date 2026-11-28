@@ -201,12 +201,15 @@ rename_standard_assets() {
   move_or_remove_asset "$TARGET_DIR/public/assets/img/social/medico-og.webp" "$TARGET_DIR/public/assets/img/social/${SLUG}-og.webp"
   move_or_remove_asset "$TARGET_DIR/public/assets/img/medico-mark.svg" "$TARGET_DIR/public/assets/img/${SLUG}-mark.svg"
   rm -f "$TARGET_DIR/public/assets/img/clinic-mark.svg"
+  # O logo em img/brand/ é da clínica deste repositório, não do novo nicho.
+  rm -rf "$TARGET_DIR/public/assets/img/brand" "$TARGET_DIR/resources/brand"
 
   if [[ -f "$content_file" ]]; then
     sed -i "s|assets/img/hero/medico-|assets/img/hero/$(sed_escape "$SLUG")-|g" "$content_file"
     sed -i "s|assets/img/social/medico-og.jpg|assets/img/social/$(sed_escape "$SLUG")-og.jpg|g" "$content_file"
     sed -i "s|assets/img/social/medico-og.webp|assets/img/social/$(sed_escape "$SLUG")-og.webp|g" "$content_file"
     sed -i "s|assets/img/medico-mark.svg|assets/img/$(sed_escape "$SLUG")-mark.svg|g" "$content_file"
+    sed -i '/\/\/ brand:start/,/\/\/ brand:end/d' "$content_file"
   fi
 }
 

@@ -50,6 +50,29 @@ PHP);
         self::assertSame('Default meta', $content['footer']['meta'] ?? null);
     }
 
+    public function testNamedContentDoesNotInheritDefaultBrandLogo(): void
+    {
+        file_put_contents($this->rootPath . '/config/content/landing.php', <<<'PHP'
+<?php
+return [
+    'brand' => ['logo' => ['src' => 'assets/img/brand/default-logo.webp']],
+    'seo' => ['title' => 'Default title'],
+];
+PHP);
+        file_put_contents($this->rootPath . '/config/content/pediatria.php', <<<'PHP'
+<?php
+return ['seo' => ['title' => 'Pediatria title']];
+PHP);
+        file_put_contents($this->rootPath . '/config/content/odontologia.php', <<<'PHP'
+<?php
+return ['brand' => ['logo' => ['src' => 'assets/img/brand/odonto-logo.webp']]];
+PHP);
+
+        self::assertSame('assets/img/brand/default-logo.webp', LandingContent::load($this->rootPath)['brand']['logo']['src']);
+        self::assertArrayNotHasKey('brand', LandingContent::load($this->rootPath, 'pediatria'));
+        self::assertSame('assets/img/brand/odonto-logo.webp', LandingContent::load($this->rootPath, 'odontologia')['brand']['logo']['src']);
+    }
+
     public function testLoadSanitizesContentFileNameAndFallsBackToDefault(): void
     {
         file_put_contents($this->rootPath . '/config/content/landing.php', <<<'PHP'

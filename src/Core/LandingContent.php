@@ -22,6 +22,10 @@ final class LandingContent
                 continue;
             }
 
+            // A identidade visual (logo) é da clínica de landing.php: um nicho só tem
+            // logo se declarar o próprio bloco 'brand'.
+            unset($default['brand']);
+
             return self::mergeContent($default, self::readContentFile($path));
         }
 

@@ -1,0 +1,10 @@
+# Análise estática. Rode: composer analyse
+# Nível 5 limpo. O nível 6 exige tipar o conteúdo dos arrays (array<string, mixed> etc.):
+# suba quando isso for feito.
+parameters:
+    level: 5
+    paths:
+        - src
+        - config/app.php
+        - public/index.php
+        - routes
