@@ -8,14 +8,14 @@ return [
         'description' => 'Clínica de estética com avaliação facial e corporal, planejamento individual e acompanhamento com orientação clara e responsável.',
         'site_name' => 'Clínica de Estética',
         'image' => [
-            'src' => 'assets/img/social/estetica-og.jpg',
+            'src' => 'assets/img/estetica/og.jpg',
             'width' => 1200,
             'height' => 630,
             'alt' => 'Atendimento estético em ambiente elegante e acolhedor',
         ],
         'schema' => [
             'type' => 'HealthAndBeautyBusiness',
-            'logo' => 'assets/img/estetica-mark.svg',
+            'logo' => 'assets/img/estetica/mark.svg',
             'area_served' => 'Natal e região',
             'include_services' => true,
             'include_faq' => true,
@@ -87,16 +87,16 @@ return [
             ],
         ],
         'image' => [
-            'src' => 'assets/img/hero/estetica-640.webp',
+            'src' => 'assets/img/estetica/hero-640.webp',
             'sources' => [
-                ['path' => 'assets/img/hero/estetica-640.webp', 'width' => 640],
-                ['path' => 'assets/img/hero/estetica-960.webp', 'width' => 960],
-                ['path' => 'assets/img/hero/estetica-1896.webp', 'width' => 1896],
+                ['path' => 'assets/img/estetica/hero-640.webp', 'width' => 640],
+                ['path' => 'assets/img/estetica/hero-960.webp', 'width' => 960],
+                ['path' => 'assets/img/estetica/hero-1896.webp', 'width' => 1896],
             ],
             'mobile' => [
-                'src' => 'assets/img/hero/estetica-mobile-640.webp',
+                'src' => 'assets/img/estetica/hero-mobile-640.webp',
                 'sources' => [
-                    ['path' => 'assets/img/hero/estetica-mobile-640.webp', 'width' => 640],
+                    ['path' => 'assets/img/estetica/hero-mobile-640.webp', 'width' => 640],
                 ],
                 'sizes' => '92vw',
                 'media' => '(max-width: 576px)',

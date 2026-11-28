@@ -105,12 +105,12 @@ for slug in "${SLUGS[@]}"; do
     || fail "$slug gerou $actual_content_count arquivos de conteúdo; esperado $expected_content_count"
 
   for required in \
-    "$target/public/assets/img/hero/${slug}-640.webp" \
-    "$target/public/assets/img/hero/${slug}-960.webp" \
-    "$target/public/assets/img/hero/${slug}-1896.webp" \
-    "$target/public/assets/img/hero/${slug}-mobile-640.webp" \
-    "$target/public/assets/img/social/${slug}-og.jpg" \
-    "$target/public/assets/img/${slug}-mark.svg"; do
+    "$target/public/assets/img/${slug}/hero-640.webp" \
+    "$target/public/assets/img/${slug}/hero-960.webp" \
+    "$target/public/assets/img/${slug}/hero-1896.webp" \
+    "$target/public/assets/img/${slug}/hero-mobile-640.webp" \
+    "$target/public/assets/img/${slug}/og.jpg" \
+    "$target/public/assets/img/${slug}/mark.svg"; do
     [[ -f "$required" ]] || fail "asset obrigatório ausente para $slug: ${required#$target/}"
   done
 
@@ -118,7 +118,7 @@ for slug in "${SLUGS[@]}"; do
     # grep (sempre disponível) em vez de rg: com "! rg", a ausência do ripgrep fazia a
     # checagem passar em silêncio. Status: 0 = achou (falha), 1 = limpo, >1 = erro (falha).
     stale_status=0
-    grep -rnE "assets/img/hero/medico-|assets/img/social/medico-og|assets/img/medico-mark\\.svg|assets/img/clinic-mark\\.svg|assets/img/img_default_640\\.webp" \
+    grep -rnE "assets/img/medico/|assets/img/clinic-mark\\.svg|assets/img/img_default_640\\.webp" \
       "$target/config" "$target/views" "$target/src" >/tmp/landing-audit-stale.txt || stale_status=$?
     if [[ "$stale_status" -eq 0 ]]; then
       fail "$slug contém fallback/asset stale: $(head -1 /tmp/landing-audit-stale.txt)"
@@ -132,8 +132,8 @@ for slug in "${SLUGS[@]}"; do
       continue
     fi
 
-    leftover="$(find "$target/public/assets/img/hero" "$target/public/assets/img/social" "$target/public/assets/img" -maxdepth 1 -type f -name "${other_slug}-*" -print -quit)"
-    [[ -z "$leftover" ]] || fail "$slug carregou asset de outro nicho: ${leftover#$target/}"
+    leftover="$target/public/assets/img/${other_slug}"
+    [[ ! -e "$leftover" ]] || fail "$slug carregou asset de outro nicho: ${leftover#$target/}"
 
     leftover_content="$target/config/content/${other_slug}.php"
     [[ ! -f "$leftover_content" ]] || fail "$slug carregou conteúdo de outro nicho: ${leftover_content#$target/}"

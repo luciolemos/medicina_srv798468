@@ -22,7 +22,7 @@ final class SeoMetadata
             $seo['description'] ?? null,
             'Atendimento com hora marcada, equipe organizada e retorno claro.'
         );
-        $imageSrc = $this->firstNonEmpty($image['src'] ?? null, 'assets/img/social/' . $this->slug() . '-og.jpg');
+        $imageSrc = $this->firstNonEmpty($image['src'] ?? null, 'assets/img/' . $this->slug() . '/og.jpg');
 
         return [
             'title' => $this->firstNonEmpty(
@@ -66,7 +66,7 @@ final class SeoMetadata
         $logo = $this->firstNonEmpty(
             $brand['schema_logo'] ?? null,
             $schema['logo'] ?? null,
-            'assets/img/' . $this->slug() . '-mark.svg'
+            'assets/img/' . $this->slug() . '/mark.svg'
         );
         if ($logo !== '') {
             $business['logo'] = $this->absolutePublicUrl($logo);

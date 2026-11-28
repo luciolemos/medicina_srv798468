@@ -8,14 +8,14 @@ return [
         'description' => 'Nutrição clínica com avaliação individual, plano alimentar personalizado e acompanhamento contínuo para saúde, rotina e desempenho.',
         'site_name' => 'Clínica de Nutrição',
         'image' => [
-            'src' => 'assets/img/social/nutricao-og.jpg',
+            'src' => 'assets/img/nutricao/og.jpg',
             'width' => 1200,
             'height' => 630,
             'alt' => 'Nutricionista orientando paciente em consulta nutricional',
         ],
         'schema' => [
             'type' => 'MedicalBusiness',
-            'logo' => 'assets/img/nutricao-mark.svg',
+            'logo' => 'assets/img/nutricao/mark.svg',
             'area_served' => 'Natal e região',
             'include_services' => true,
             'include_faq' => true,
@@ -82,16 +82,16 @@ return [
             ],
         ],
         'image' => [
-            'src' => 'assets/img/hero/nutricao-640.webp',
+            'src' => 'assets/img/nutricao/hero-640.webp',
             'sources' => [
-                ['path' => 'assets/img/hero/nutricao-640.webp', 'width' => 640],
-                ['path' => 'assets/img/hero/nutricao-960.webp', 'width' => 960],
-                ['path' => 'assets/img/hero/nutricao-1896.webp', 'width' => 1896],
+                ['path' => 'assets/img/nutricao/hero-640.webp', 'width' => 640],
+                ['path' => 'assets/img/nutricao/hero-960.webp', 'width' => 960],
+                ['path' => 'assets/img/nutricao/hero-1896.webp', 'width' => 1896],
             ],
             'mobile' => [
-                'src' => 'assets/img/hero/nutricao-mobile-640.webp',
+                'src' => 'assets/img/nutricao/hero-mobile-640.webp',
                 'sources' => [
-                    ['path' => 'assets/img/hero/nutricao-mobile-640.webp', 'width' => 640],
+                    ['path' => 'assets/img/nutricao/hero-mobile-640.webp', 'width' => 640],
                 ],
                 'sizes' => '92vw',
                 'media' => '(max-width: 576px)',

@@ -102,13 +102,13 @@ foreach ($slugs as $slug) {
 
     foreach ($sizes['hero'] as $size) {
         $image = renderScene($slug, $themes[$slug], $size['width'], $size['height']);
-        $path = "{$projectRoot}/public/assets/img/hero/{$slug}-{$size['suffix']}.webp";
+        $path = "{$projectRoot}/public/assets/img/{$slug}/hero-{$size['suffix']}.webp";
         saveWebp($image, $path);
     }
 
     foreach ($sizes['social'] as $size) {
         $image = renderScene($slug, $themes[$slug], $size['width'], $size['height']);
-        $path = "{$projectRoot}/public/assets/img/social/{$slug}-{$size['suffix']}.jpg";
+        $path = "{$projectRoot}/public/assets/img/{$slug}/{$size['suffix']}.jpg";
         saveJpeg($image, $path);
     }
 

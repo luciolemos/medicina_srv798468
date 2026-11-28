@@ -8,14 +8,14 @@ return [
         'description' => 'Clínica veterinária com consultas, vacinação, check-ups e acompanhamento com orientação clara para tutores.',
         'site_name' => 'Clínica Veterinária',
         'image' => [
-            'src' => 'assets/img/social/veterinaria-og.jpg',
+            'src' => 'assets/img/veterinaria/og.jpg',
             'width' => 1200,
             'height' => 630,
             'alt' => 'Atendimento veterinário acolhedor com tutor',
         ],
         'schema' => [
             'type' => 'VeterinaryCare',
-            'logo' => 'assets/img/veterinaria-mark.svg',
+            'logo' => 'assets/img/veterinaria/mark.svg',
             'area_served' => 'Natal e região',
             'include_services' => true,
             'include_faq' => true,
@@ -87,16 +87,16 @@ return [
             ],
         ],
         'image' => [
-            'src' => 'assets/img/hero/veterinaria-640.webp',
+            'src' => 'assets/img/veterinaria/hero-640.webp',
             'sources' => [
-                ['path' => 'assets/img/hero/veterinaria-640.webp', 'width' => 640],
-                ['path' => 'assets/img/hero/veterinaria-960.webp', 'width' => 960],
-                ['path' => 'assets/img/hero/veterinaria-1896.webp', 'width' => 1896],
+                ['path' => 'assets/img/veterinaria/hero-640.webp', 'width' => 640],
+                ['path' => 'assets/img/veterinaria/hero-960.webp', 'width' => 960],
+                ['path' => 'assets/img/veterinaria/hero-1896.webp', 'width' => 1896],
             ],
             'mobile' => [
-                'src' => 'assets/img/hero/veterinaria-mobile-640.webp',
+                'src' => 'assets/img/veterinaria/hero-mobile-640.webp',
                 'sources' => [
-                    ['path' => 'assets/img/hero/veterinaria-mobile-640.webp', 'width' => 640],
+                    ['path' => 'assets/img/veterinaria/hero-mobile-640.webp', 'width' => 640],
                 ],
                 'sizes' => '92vw',
                 'media' => '(max-width: 576px)',

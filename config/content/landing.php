@@ -4,34 +4,34 @@ declare(strict_types=1);
 
 return [
     // brand:start — logo da marca no topo. create-landing.sh remove este bloco e
-    // public/assets/img/brand/ ao gerar landings de outra clínica.
+    // a marca em public/assets/img/medico/ ao gerar landings de outra clínica.
     'brand' => [
         'logo' => [
-            'src' => 'assets/img/brand/medicare-logo.webp',
-            'src_2x' => 'assets/img/brand/medicare-logo@2x.webp',
-            'dark_src' => 'assets/img/brand/medicare-logo-dark.webp',
-            'dark_src_2x' => 'assets/img/brand/medicare-logo-dark@2x.webp',
+            'src' => 'assets/img/medico/logo.webp',
+            'src_2x' => 'assets/img/medico/logo@2x.webp',
+            'dark_src' => 'assets/img/medico/logo-dark.webp',
+            'dark_src_2x' => 'assets/img/medico/logo-dark@2x.webp',
             'width' => 137,
             'height' => 44,
         ],
         // Foto do topo (recorte com fundo transparente). Substitui hero.image.
         'hero_image' => [
-            'src' => 'assets/img/brand/hero-540.webp',
+            'src' => 'assets/img/medico/foto-540.webp',
             'avif_sources' => [
-                ['path' => 'assets/img/brand/hero-360.avif', 'width' => 360],
-                ['path' => 'assets/img/brand/hero-540.avif', 'width' => 540],
-                ['path' => 'assets/img/brand/hero-720.avif', 'width' => 720],
-                ['path' => 'assets/img/brand/hero-900.avif', 'width' => 900],
-                ['path' => 'assets/img/brand/hero-1080.avif', 'width' => 1080],
-                ['path' => 'assets/img/brand/hero-1260.avif', 'width' => 1260],
+                ['path' => 'assets/img/medico/foto-360.avif', 'width' => 360],
+                ['path' => 'assets/img/medico/foto-540.avif', 'width' => 540],
+                ['path' => 'assets/img/medico/foto-720.avif', 'width' => 720],
+                ['path' => 'assets/img/medico/foto-900.avif', 'width' => 900],
+                ['path' => 'assets/img/medico/foto-1080.avif', 'width' => 1080],
+                ['path' => 'assets/img/medico/foto-1260.avif', 'width' => 1260],
             ],
             'sources' => [
-                ['path' => 'assets/img/brand/hero-360.webp', 'width' => 360],
-                ['path' => 'assets/img/brand/hero-540.webp', 'width' => 540],
-                ['path' => 'assets/img/brand/hero-720.webp', 'width' => 720],
-                ['path' => 'assets/img/brand/hero-900.webp', 'width' => 900],
-                ['path' => 'assets/img/brand/hero-1080.webp', 'width' => 1080],
-                ['path' => 'assets/img/brand/hero-1260.webp', 'width' => 1260],
+                ['path' => 'assets/img/medico/foto-360.webp', 'width' => 360],
+                ['path' => 'assets/img/medico/foto-540.webp', 'width' => 540],
+                ['path' => 'assets/img/medico/foto-720.webp', 'width' => 720],
+                ['path' => 'assets/img/medico/foto-900.webp', 'width' => 900],
+                ['path' => 'assets/img/medico/foto-1080.webp', 'width' => 1080],
+                ['path' => 'assets/img/medico/foto-1260.webp', 'width' => 1260],
             ],
             'sizes' => '(max-width: 575.98px) 92vw, 540px',
             'width' => 1260,
@@ -41,11 +41,11 @@ return [
         ],
         // Rosto da mesma médica, para o cartão de prova social do topo.
         'proof_avatar' => [
-            'src' => 'assets/img/brand/doctor-avatar-56.webp',
+            'src' => 'assets/img/medico/avatar-56.webp',
             'sources' => [
-                ['path' => 'assets/img/brand/doctor-avatar-56.webp', 'width' => 56],
-                ['path' => 'assets/img/brand/doctor-avatar-112.webp', 'width' => 112],
-                ['path' => 'assets/img/brand/doctor-avatar-168.webp', 'width' => 168],
+                ['path' => 'assets/img/medico/avatar-56.webp', 'width' => 56],
+                ['path' => 'assets/img/medico/avatar-112.webp', 'width' => 112],
+                ['path' => 'assets/img/medico/avatar-168.webp', 'width' => 168],
             ],
             'sizes' => '56px',
             'width' => 56,
@@ -53,13 +53,13 @@ return [
         ],
         // Favicon e ícones de atalho (cruz do logo sobre fundo branco).
         'icons' => [
-            'ico' => 'assets/img/brand/favicon.ico',
-            'png_192' => 'assets/img/brand/icon-192.png',
-            'apple_touch' => 'assets/img/brand/apple-touch-icon.png',
-            'manifest' => 'assets/img/brand/site.webmanifest',
+            'ico' => 'assets/img/medico/icons/favicon.ico',
+            'png_192' => 'assets/img/medico/icons/icon-192.png',
+            'apple_touch' => 'assets/img/medico/icons/apple-touch-icon.png',
+            'manifest' => 'assets/img/medico/icons/site.webmanifest',
         ],
         // Logo usado nos dados estruturados (JSON-LD) no lugar de seo.schema.logo.
-        'schema_logo' => 'assets/img/brand/medicare-logo-600.png',
+        'schema_logo' => 'assets/img/medico/logo-600.png',
     ],
     // brand:end
     'seo' => [
@@ -70,14 +70,14 @@ return [
         'type' => 'website',
         'twitter_card' => 'summary_large_image',
         'image' => [
-            'src' => 'assets/img/social/medico-og.jpg',
+            'src' => 'assets/img/medico/og.jpg',
             'width' => 1200,
             'height' => 630,
             'alt' => 'Médica em consulta com paciente no consultório',
         ],
         'schema' => [
             'type' => 'MedicalClinic',
-            'logo' => 'assets/img/medico-mark.svg',
+            'logo' => 'assets/img/medico/mark.svg',
             'price_range' => '$$',
             'area_served' => 'Natal e região',
             'include_services' => true,
@@ -145,10 +145,10 @@ return [
         ],
         'proof' => [
             'avatar' => [
-                'src' => 'assets/img/avatars/face2_96.webp',
+                'src' => 'assets/img/shared/avatars/face2_96.webp',
                 'sources' => [
-                    ['path' => 'assets/img/avatars/face2_96.webp', 'width' => 96],
-                    ['path' => 'assets/img/avatars/face2_160.webp', 'width' => 160],
+                    ['path' => 'assets/img/shared/avatars/face2_96.webp', 'width' => 96],
+                    ['path' => 'assets/img/shared/avatars/face2_160.webp', 'width' => 160],
                 ],
                 'sizes' => '56px',
                 'width' => 56,
@@ -162,18 +162,18 @@ return [
             ],
         ],
         'image' => [
-            'src' => 'assets/img/hero/medico-640.webp',
+            'src' => 'assets/img/medico/hero-640.webp',
             'sources' => [
-                ['path' => 'assets/img/hero/medico-640.webp', 'width' => 640],
-                ['path' => 'assets/img/hero/medico-960.webp', 'width' => 960],
-                ['path' => 'assets/img/hero/medico-1896.webp', 'width' => 1896],
+                ['path' => 'assets/img/medico/hero-640.webp', 'width' => 640],
+                ['path' => 'assets/img/medico/hero-960.webp', 'width' => 960],
+                ['path' => 'assets/img/medico/hero-1896.webp', 'width' => 1896],
             ],
             'sizes' => '(max-width: 768px) 92vw, (max-width: 1200px) 44vw, 840px',
             'desktop_media' => '(min-width: 577px)',
             'mobile' => [
-                'src' => 'assets/img/hero/medico-mobile-640.webp',
+                'src' => 'assets/img/medico/hero-mobile-640.webp',
                 'sources' => [
-                    ['path' => 'assets/img/hero/medico-mobile-640.webp', 'width' => 640],
+                    ['path' => 'assets/img/medico/hero-mobile-640.webp', 'width' => 640],
                 ],
                 'sizes' => '92vw',
                 'media' => '(max-width: 576px)',
