@@ -63,29 +63,50 @@ Os dois arquivos gerados são versionados. O `quality-gate` roda `build-icons-cs
 
 `scripts/create-landing.sh` regenera o subconjunto de ícones na cópia nova.
 
-## Logo e foto da marca
+## Imagens: uma pasta por modelo
 
-Os originais ficam em `resources/brand/` (fora de `public/`, não são publicados). As versões servidas ficam em `public/assets/img/brand/` e são ligadas no bloco `brand` de `config/content/landing.php`. Para regenerá-las após trocar um original (ImageMagick com suporte a AVIF):
+Cada modelo (nicho) tem todas as suas imagens em `public/assets/img/<slug>/`, com os mesmos nomes em todos:
+
+```
+public/assets/img/
+├── medico/            marca do Medicare (logo, foto, avatar, ícones) + imagens do nicho
+│   ├── mark.svg       símbolo
+│   ├── hero-640.webp  hero-960.webp  hero-1896.webp  hero-mobile-640.webp   imagem de topo
+│   ├── og.jpg         compartilhamento (1200 × 630)
+│   ├── logo.webp  logo@2x.webp  logo-dark.webp  logo-dark@2x.webp  logo-600.png
+│   ├── foto-360…1260.{webp,avif}   foto recortada do topo
+│   ├── avatar-56/112/168.webp      responsável técnico
+│   └── icons/         favicon.ico, apple-touch-icon.png, icon-192/512.png, icon-maskable-512.png, site.webmanifest
+├── psicologia/  pediatria/  nutricao/  odontologia/  estetica/  veterinaria/
+│                      mark.svg, hero-*.webp, og.jpg (e a marca própria, quando houver)
+└── shared/avatars/    imagens usadas por mais de um modelo
+```
+
+Marca nova de um nicho (logo, foto, ícones): coloque os arquivos na pasta dele e ligue no bloco `brand` de `config/content/<slug>.php`.
+
+## Logo e foto da marca (Medicare)
+
+Os originais ficam em `resources/brand/` (fora de `public/`, não são publicados). As versões servidas ficam em `public/assets/img/medico/` e são ligadas no bloco `brand` de `config/content/landing.php`. Para regenerá-las após trocar um original (ImageMagick com suporte a AVIF):
 
 ```bash
 # Foto do topo: 6 larguras em AVIF e WebP
 convert resources/brand/hero.png -trim +repage /tmp/hero.png
 for w in 360 540 720 900 1080 1260; do
-  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 80 -define webp:alpha-quality=85 public/assets/img/brand/hero-$w.webp
-  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 55 public/assets/img/brand/hero-$w.avif
+  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 80 -define webp:alpha-quality=85 public/assets/img/medico/foto-$w.webp
+  convert /tmp/hero.png -filter Lanczos -resize ${w}x -strip -quality 55 public/assets/img/medico/foto-$w.avif
 done
 ```
 
-O favicon (`favicon.ico` com 16, 32 e 48 px), os ícones de atalho (`icon-192/512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`) e o `site.webmanifest` usam a cruz do logo sobre fundo branco, que aparece bem em abas claras e escuras. O `medicare-logo-600.png` é o logo dos dados estruturados (JSON-LD).
+O favicon (`favicon.ico` com 16, 32 e 48 px), os ícones de atalho (`icon-192/512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`) (em `public/assets/img/medico/icons/`) e o `site.webmanifest` usam a cruz do logo sobre fundo branco, que aparece bem em abas claras e escuras. O `logo-600.png` é o logo dos dados estruturados (JSON-LD).
 
-O logo segue o mesmo processo em 44 px e 88 px de altura (`medicare-logo.webp` e `@2x`). A versão `-dark` troca os pixels verdes por `#e3efe7` para aparecer no tema escuro. Nichos não herdam o bloco `brand`, e o `create-landing.sh` remove o bloco, `public/assets/img/brand/` e `resources/brand/` ao gerar outra clínica.
+O logo segue o mesmo processo em 44 px e 88 px de altura (`logo.webp` e `@2x`). A versão `-dark` troca os pixels verdes por `#e3efe7` para aparecer no tema escuro. Nichos não herdam o bloco `brand`, e o `create-landing.sh` remove o bloco, `public/assets/img/medico/` e `resources/brand/` ao gerar outra clínica.
 
 ## Criando uma nova landing
 
 1. Copie este projeto para o novo diretório, por exemplo `/var/www/pediatria`.
 2. Remova a identidade Git herdada se o destino for outro repositório.
 3. Ajuste `.env`: `APP_BASE`, nome público, links sociais, WhatsApp, SMTP e reCAPTCHA.
-4. Troque textos no arquivo ativo de `config/content/` e imagens em `public/assets/img/hero/` e `public/assets/img/social/`.
+4. Troque textos no arquivo ativo de `config/content/` e imagens em `public/assets/img/<slug>/`.
 5. Rode `composer test` e `bash scripts/run-tests.sh --url "http://127.0.0.1:8000/"`.
 
 Também há um gerador para criar uma cópia limpa do protótipo:
@@ -150,6 +171,6 @@ Os presets recomendados para cada nicho ficam em `config/presets/niches.php`. O 
 
 Os conteúdos de nicho versionados são `config/content/pediatria.php`, `config/content/odontologia.php`, `config/content/veterinaria.php`, `config/content/estetica.php` e `config/content/psicologia.php`. Eles herdam a estrutura base de `landing.php` e sobrescrevem textos, SEO, tipografia, serviços, FAQ e mensagens de formulário para cada área.
 
-As imagens principais seguem nomes padronizados: `public/assets/img/hero/{slug}-640.webp`, `{slug}-960.webp`, `{slug}-1896.webp`, `{slug}-mobile-640.webp`, `public/assets/img/social/{slug}-og.jpg` e `public/assets/img/{slug}-mark.svg`. O corte mobile é vertical para preservar o rosto/atendimento em telas estreitas. O gerador renomeia os placeholders para o slug novo; depois substitua esses arquivos por imagens finais do nicho.
+As imagens principais seguem nomes padronizados em `public/assets/img/{slug}/`: `hero-640.webp`, `hero-960.webp`, `hero-1896.webp`, `hero-mobile-640.webp`, `og.jpg` e `mark.svg`. O corte mobile é vertical para preservar o rosto/atendimento em telas estreitas. O gerador cria a pasta do slug novo com as imagens genéricas do médico como ponto de partida; depois substitua esses arquivos por imagens finais do nicho.
 
 O Twig roda com `auto_reload`, então templates alterados por deploy são recompilados sozinhos; não é preciso limpar `storage/cache/twig`.

@@ -8,14 +8,14 @@ return [
         'description' => 'Psicologia com escuta acolhedora, atendimento individual e acompanhamento com privacidade, clareza e organização.',
         'site_name' => 'Clínica de Psicologia',
         'image' => [
-            'src' => 'assets/img/social/psicologia-og.jpg',
+            'src' => 'assets/img/psicologia/og.jpg',
             'width' => 1200,
             'height' => 630,
             'alt' => 'Atendimento psicológico em ambiente reservado e acolhedor',
         ],
         'schema' => [
             'type' => 'MedicalBusiness',
-            'logo' => 'assets/img/psicologia-mark.svg',
+            'logo' => 'assets/img/psicologia/mark.svg',
             'area_served' => 'Natal e região',
             'include_services' => true,
             'include_faq' => true,
@@ -87,16 +87,16 @@ return [
             ],
         ],
         'image' => [
-            'src' => 'assets/img/hero/psicologia-640.webp',
+            'src' => 'assets/img/psicologia/hero-640.webp',
             'sources' => [
-                ['path' => 'assets/img/hero/psicologia-640.webp', 'width' => 640],
-                ['path' => 'assets/img/hero/psicologia-960.webp', 'width' => 960],
-                ['path' => 'assets/img/hero/psicologia-1896.webp', 'width' => 1896],
+                ['path' => 'assets/img/psicologia/hero-640.webp', 'width' => 640],
+                ['path' => 'assets/img/psicologia/hero-960.webp', 'width' => 960],
+                ['path' => 'assets/img/psicologia/hero-1896.webp', 'width' => 1896],
             ],
             'mobile' => [
-                'src' => 'assets/img/hero/psicologia-mobile-640.webp',
+                'src' => 'assets/img/psicologia/hero-mobile-640.webp',
                 'sources' => [
-                    ['path' => 'assets/img/hero/psicologia-mobile-640.webp', 'width' => 640],
+                    ['path' => 'assets/img/psicologia/hero-mobile-640.webp', 'width' => 640],
                 ],
                 'sizes' => '92vw',
                 'media' => '(max-width: 576px)',

@@ -8,14 +8,14 @@ return [
         'description' => 'Pediatria com consultas infantis, puericultura, acompanhamento do desenvolvimento e orientação clara para responsáveis.',
         'site_name' => 'Clínica Pediátrica',
         'image' => [
-            'src' => 'assets/img/social/pediatria-og.jpg',
+            'src' => 'assets/img/pediatria/og.jpg',
             'width' => 1200,
             'height' => 630,
             'alt' => 'Pediatra em atendimento acolhedor com criança e responsável',
         ],
         'schema' => [
             'type' => 'MedicalClinic',
-            'logo' => 'assets/img/pediatria-mark.svg',
+            'logo' => 'assets/img/pediatria/mark.svg',
             'area_served' => 'Natal e região',
             'include_services' => true,
             'include_faq' => true,
@@ -87,16 +87,16 @@ return [
             ],
         ],
         'image' => [
-            'src' => 'assets/img/hero/pediatria-640.webp',
+            'src' => 'assets/img/pediatria/hero-640.webp',
             'sources' => [
-                ['path' => 'assets/img/hero/pediatria-640.webp', 'width' => 640],
-                ['path' => 'assets/img/hero/pediatria-960.webp', 'width' => 960],
-                ['path' => 'assets/img/hero/pediatria-1896.webp', 'width' => 1896],
+                ['path' => 'assets/img/pediatria/hero-640.webp', 'width' => 640],
+                ['path' => 'assets/img/pediatria/hero-960.webp', 'width' => 960],
+                ['path' => 'assets/img/pediatria/hero-1896.webp', 'width' => 1896],
             ],
             'mobile' => [
-                'src' => 'assets/img/hero/pediatria-mobile-640.webp',
+                'src' => 'assets/img/pediatria/hero-mobile-640.webp',
                 'sources' => [
-                    ['path' => 'assets/img/hero/pediatria-mobile-640.webp', 'width' => 640],
+                    ['path' => 'assets/img/pediatria/hero-mobile-640.webp', 'width' => 640],
                 ],
                 'sizes' => '92vw',
                 'media' => '(max-width: 576px)',

@@ -1,7 +1,7 @@
 {
   "name": "MEDICARE Clínica Médica",
   "short_name": "MEDICARE",
-  "start_url": "../../../",
+  "start_url": "../../../../",
   "display": "browser",
   "background_color": "#ffffff",
   "theme_color": "#0b0f19",

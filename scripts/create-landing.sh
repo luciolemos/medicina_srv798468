@@ -188,27 +188,25 @@ move_or_remove_asset() {
 
 rename_standard_assets() {
   local content_file="$TARGET_DIR/config/content/landing.php"
+  local img="$TARGET_DIR/public/assets/img"
 
   if [[ "$SLUG" == "medico" ]]; then
     return
   fi
 
-  move_or_remove_asset "$TARGET_DIR/public/assets/img/hero/medico-640.webp" "$TARGET_DIR/public/assets/img/hero/${SLUG}-640.webp"
-  move_or_remove_asset "$TARGET_DIR/public/assets/img/hero/medico-960.webp" "$TARGET_DIR/public/assets/img/hero/${SLUG}-960.webp"
-  move_or_remove_asset "$TARGET_DIR/public/assets/img/hero/medico-1896.webp" "$TARGET_DIR/public/assets/img/hero/${SLUG}-1896.webp"
-  move_or_remove_asset "$TARGET_DIR/public/assets/img/hero/medico-mobile-640.webp" "$TARGET_DIR/public/assets/img/hero/${SLUG}-mobile-640.webp"
-  move_or_remove_asset "$TARGET_DIR/public/assets/img/social/medico-og.jpg" "$TARGET_DIR/public/assets/img/social/${SLUG}-og.jpg"
-  move_or_remove_asset "$TARGET_DIR/public/assets/img/social/medico-og.webp" "$TARGET_DIR/public/assets/img/social/${SLUG}-og.webp"
-  move_or_remove_asset "$TARGET_DIR/public/assets/img/medico-mark.svg" "$TARGET_DIR/public/assets/img/${SLUG}-mark.svg"
-  rm -f "$TARGET_DIR/public/assets/img/clinic-mark.svg"
-  # O logo em img/brand/ é da clínica deste repositório, não do novo nicho.
-  rm -rf "$TARGET_DIR/public/assets/img/brand" "$TARGET_DIR/resources/brand"
+  # Cada modelo tem a sua pasta em img/<slug>/. Sem pasta própria, o nicho novo herda as
+  # imagens genéricas do médico (topo, compartilhamento e símbolo) como ponto de partida.
+  mkdir -p "$img/${SLUG}"
+  local name
+  for name in hero-640.webp hero-960.webp hero-1896.webp hero-mobile-640.webp og.jpg og.webp mark.svg; do
+    move_or_remove_asset "$img/medico/$name" "$img/${SLUG}/$name"
+  done
+  rm -f "$img/clinic-mark.svg"
+  # O resto de img/medico/ (logo, foto, avatar, ícones) é a marca da clínica deste repositório.
+  rm -rf "$img/medico" "$TARGET_DIR/resources/brand"
 
   if [[ -f "$content_file" ]]; then
-    sed -i "s|assets/img/hero/medico-|assets/img/hero/$(sed_escape "$SLUG")-|g" "$content_file"
-    sed -i "s|assets/img/social/medico-og.jpg|assets/img/social/$(sed_escape "$SLUG")-og.jpg|g" "$content_file"
-    sed -i "s|assets/img/social/medico-og.webp|assets/img/social/$(sed_escape "$SLUG")-og.webp|g" "$content_file"
-    sed -i "s|assets/img/medico-mark.svg|assets/img/$(sed_escape "$SLUG")-mark.svg|g" "$content_file"
+    sed -i "s|assets/img/medico/|assets/img/$(sed_escape "$SLUG")/|g" "$content_file"
     sed -i '/\/\/ brand:start/,/\/\/ brand:end/d' "$content_file"
   fi
 }
@@ -228,12 +226,12 @@ source_has_slug_content() {
 
 required_slug_assets() {
   cat <<EOF
-public/assets/img/hero/${SLUG}-640.webp
-public/assets/img/hero/${SLUG}-960.webp
-public/assets/img/hero/${SLUG}-1896.webp
-public/assets/img/hero/${SLUG}-mobile-640.webp
-public/assets/img/social/${SLUG}-og.jpg
-public/assets/img/${SLUG}-mark.svg
+public/assets/img/${SLUG}/hero-640.webp
+public/assets/img/${SLUG}/hero-960.webp
+public/assets/img/${SLUG}/hero-1896.webp
+public/assets/img/${SLUG}/hero-mobile-640.webp
+public/assets/img/${SLUG}/og.jpg
+public/assets/img/${SLUG}/mark.svg
 EOF
 }
 
@@ -277,13 +275,7 @@ prune_extra_niche_assets() {
       continue
     fi
 
-    rm -f "$TARGET_DIR/public/assets/img/hero/${asset_slug}-640.webp"
-    rm -f "$TARGET_DIR/public/assets/img/hero/${asset_slug}-960.webp"
-    rm -f "$TARGET_DIR/public/assets/img/hero/${asset_slug}-1896.webp"
-    rm -f "$TARGET_DIR/public/assets/img/hero/${asset_slug}-mobile-640.webp"
-    rm -f "$TARGET_DIR/public/assets/img/social/${asset_slug}-og.jpg"
-    rm -f "$TARGET_DIR/public/assets/img/social/${asset_slug}-og.webp"
-    rm -f "$TARGET_DIR/public/assets/img/${asset_slug}-mark.svg"
+    rm -rf "$TARGET_DIR/public/assets/img/${asset_slug:?}"
   done < <(preset_slugs)
 }
 

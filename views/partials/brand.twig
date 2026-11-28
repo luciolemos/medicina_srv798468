@@ -3,7 +3,7 @@
   clara para o tema escuro, se houver); sem ele, mostra o ícone do nicho + nome + selo.
 #}
 {% set brand_logo = landing_content.brand.logo|default({}) %}
-{% set brand_mark = landing_content.seo.schema.logo|default('assets/img/' ~ app_slug|default('medico') ~ '-mark.svg') %}
+{% set brand_mark = landing_content.seo.schema.logo|default('assets/img/' ~ app_slug|default('medico') ~ '/mark.svg') %}
 {% set brand_name = app_name ?? 'Landing de saúde' %}
 {% if brand_logo.src|default('') %}
 <a class="navbar-brand d-flex align-items-center{{ brand_logo.dark_src|default('') ? ' has-dark-logo' : '' }}" href="{{ base_url }}/">

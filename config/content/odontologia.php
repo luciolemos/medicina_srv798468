@@ -8,14 +8,14 @@ return [
         'description' => 'Odontologia com avaliação, prevenção, estética dental e acompanhamento com comunicação clara e agenda organizada.',
         'site_name' => 'Clínica Odontológica',
         'image' => [
-            'src' => 'assets/img/social/odontologia-og.jpg',
+            'src' => 'assets/img/odontologia/og.jpg',
             'width' => 1200,
             'height' => 630,
             'alt' => 'Atendimento odontológico em consultório moderno',
         ],
         'schema' => [
             'type' => 'Dentist',
-            'logo' => 'assets/img/odontologia-mark.svg',
+            'logo' => 'assets/img/odontologia/mark.svg',
             'area_served' => 'Natal e região',
             'include_services' => true,
             'include_faq' => true,
@@ -87,16 +87,16 @@ return [
             ],
         ],
         'image' => [
-            'src' => 'assets/img/hero/odontologia-640.webp',
+            'src' => 'assets/img/odontologia/hero-640.webp',
             'sources' => [
-                ['path' => 'assets/img/hero/odontologia-640.webp', 'width' => 640],
-                ['path' => 'assets/img/hero/odontologia-960.webp', 'width' => 960],
-                ['path' => 'assets/img/hero/odontologia-1896.webp', 'width' => 1896],
+                ['path' => 'assets/img/odontologia/hero-640.webp', 'width' => 640],
+                ['path' => 'assets/img/odontologia/hero-960.webp', 'width' => 960],
+                ['path' => 'assets/img/odontologia/hero-1896.webp', 'width' => 1896],
             ],
             'mobile' => [
-                'src' => 'assets/img/hero/odontologia-mobile-640.webp',
+                'src' => 'assets/img/odontologia/hero-mobile-640.webp',
                 'sources' => [
-                    ['path' => 'assets/img/hero/odontologia-mobile-640.webp', 'width' => 640],
+                    ['path' => 'assets/img/odontologia/hero-mobile-640.webp', 'width' => 640],
                 ],
                 'sizes' => '92vw',
                 'media' => '(max-width: 576px)',
